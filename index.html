@@ -927,16 +927,6 @@
         </select>
       </div>
 
-      <!-- Agreement level -->
-      <div class="rlm-calc__field">
-        <label class="rlm-calc__label">Level of agreement <span class="rlm-calc__label-hint">(between spouses)</span></label>
-        <select class="rlm-calc__select" id="rlm-agreement">
-          <option value="high">We mostly agree on terms</option>
-          <option value="some" selected>Some disagreements to resolve</option>
-          <option value="low">Significant disagreements</option>
-        </select>
-      </div>
-
       <!-- Calculate button -->
       <div class="rlm-calc__field rlm-calc__field--full">
         <button type="button" class="rlm-calc__btn" onclick="rlmCalculate()">Calculate Costs & Family Impact</button>
@@ -1112,7 +1102,7 @@
         <div class="rlm-calc__meth-section">
           <h3 class="rlm-calc__meth-h3">How does this calculator work?</h3>
           <p class="rlm-calc__meth-p">This calculator compares two paths to ending a marriage in New York — traditional litigation and mediation with Carmen Rodriguez — across two dimensions that most divorce resources treat separately: financial cost and family wellbeing.</p>
-          <p class="rlm-calc__meth-p">The financial estimates are generated from market data on NYC attorney rates, retainers, and court fees. The wellbeing comparison draws on peer-reviewed research — including the only long-term randomized controlled trial ever conducted on divorce mediation outcomes — to show how the process you choose affects anxiety, depression, co-parenting, and your children's adjustment. Both adapt based on four inputs you provide: whether children are involved, the complexity of your case, your approximate combined marital assets, and how much you and your spouse currently agree on the key terms of your divorce.</p>
+          <p class="rlm-calc__meth-p">The financial estimates are generated from market data on NYC attorney rates, retainers, and court fees. The wellbeing comparison draws on peer-reviewed research — including the only long-term randomized controlled trial ever conducted on divorce mediation outcomes — to show how the process you choose affects anxiety, depression, co-parenting, and your children's adjustment. Both adapt based on three inputs you provide: whether children are involved, the complexity of your case, and your approximate combined marital assets.</p>
         </div>
 
         <!-- Litigation model -->
@@ -1130,7 +1120,6 @@
             <tr><td>Children involved</td><td>Adds custody, parenting plan, and child support negotiations — increases base hours from ~20 to ~30 per attorney</td></tr>
             <tr><td>Case complexity</td><td>Simple cases (few assets, short marriage) require fewer hours. Complex cases (multiple properties, business interests) may double or triple attorney time</td></tr>
             <tr><td>Asset level</td><td>Higher-value estates require more due diligence, valuation, and negotiation time</td></tr>
-            <tr><td>Level of disagreement</td><td>Contentious divorces with significant disputes generate the most billable hours through motions, discovery, and potential trial preparation</td></tr>
           </table>
 
           <h4 class="rlm-calc__meth-h4">Court and filing fees</h4>
@@ -1147,15 +1136,18 @@
         <!-- Mediation model -->
         <div class="rlm-calc__meth-section">
           <h3 class="rlm-calc__meth-h3">How are the mediation costs calculated?</h3>
-          <p class="rlm-calc__meth-p">The mediation estimate is based on the actual flat-fee packages offered by <a href="https://www.rodriguezlawandmediation.com/packages" target="_blank" rel="noopener">Rodriguez Law and Mediation</a>:</p>
+          <p class="rlm-calc__meth-p">The mediation estimate is based on the actual flat-fee packages offered by <a href="https://www.rodriguezlawandmediation.com/packages" target="_blank" rel="noopener">Rodriguez Law and Mediation</a>, with pricing determined by three factors: whether children are involved, the combined marital asset level, and case complexity. Each step up in complexity adds one additional 90-minute mediation session.</p>
           <table class="rlm-calc__meth-table">
-            <tr><th>Package</th><th>Sessions</th><th>Agreement draft</th><th>Price</th></tr>
-            <tr><td>Mediation without children</td><td>5 × 90 minutes</td><td>6 hours</td><td>$6,500</td></tr>
-            <tr><td>Mediation with children</td><td>7 × 90 minutes</td><td>8 hours</td><td>$8,500</td></tr>
-            <tr><td>Prenuptial agreements</td><td>5 × 90 minutes</td><td>6 hours</td><td>$6,500</td></tr>
+            <tr><th>Children</th><th>Complexity</th><th>Sessions</th><th>Draft</th><th>Price range by assets</th></tr>
+            <tr><td>No</td><td>Simple</td><td>5 × 90 min</td><td>6 hrs</td><td>$5,500 – $8,500</td></tr>
+            <tr><td>No</td><td>Moderate</td><td>6 × 90 min</td><td>6 hrs</td><td>$6,250 – $9,250</td></tr>
+            <tr><td>No</td><td>Complex</td><td>7 × 90 min</td><td>6–8 hrs</td><td>$7,000 – $10,000</td></tr>
+            <tr><td>Yes</td><td>Simple</td><td>7 × 90 min</td><td>8 hrs</td><td>$7,500 – $10,500</td></tr>
+            <tr><td>Yes</td><td>Moderate</td><td>8 × 90 min</td><td>8 hrs</td><td>$8,250 – $11,250</td></tr>
+            <tr><td>Yes</td><td>Complex</td><td>9 × 90 min</td><td>8–10 hrs</td><td>$9,000 – $12,000</td></tr>
           </table>
-          <p class="rlm-calc__meth-p">Every package includes written summaries of each session, the drafting of a separation agreement, and reasonable emails and phone calls throughout the process. All meetings are conducted via Zoom or telephone.</p>
-          <p class="rlm-calc__meth-p">For complex, high-asset, or highly contested cases, the calculator may show a range above the base package price, reflecting the possibility that additional mediation sessions may be needed. Carmen will discuss your specific situation during a complimentary consultation and confirm whether the standard package fits your needs or whether a custom arrangement is more appropriate.</p>
+          <p class="rlm-calc__meth-p">Within each row, the exact price depends on the combined marital asset level: under $500K (lowest), $500K–$2M, $2M–$5M, and over $5M (highest). Every package includes written summaries of each session, the drafting of a separation agreement, and email and phone call support throughout the process. For higher asset levels ($500K and above), packages include increased communications and possible financial professional consultations. All meetings are conducted via Zoom or telephone.</p>
+          <p class="rlm-calc__meth-p">For complex cases with assets over $5M, the package also includes 2 additional hours of agreement drafting at no extra charge. All prices are fixed with no surprises. Carmen will confirm your package during a complimentary consultation.</p>
 
           <div class="rlm-calc__meth-note">
             <strong>What's not included in either estimate:</strong> Neither the litigation nor mediation figures include the cost of independent review attorneys (recommended but optional in mediation), real estate transfer taxes, QDRO preparation fees for pension division, or post-divorce filing of the judgment. These costs apply regardless of which path you choose.
@@ -1277,60 +1269,66 @@
     var children = state.children === 'yes';
     var complexity = document.getElementById('rlm-complexity').value;
     var assets = document.getElementById('rlm-assets').value;
-    var agreement = document.getElementById('rlm-agreement').value;
 
     // ── Litigation estimates ──
-    // Base retainer per person (NYC)
+    // Agreement level fixed at "some disagreements" for all scenarios
     var retainerPP = { simple: 7500, moderate: 10000, complex: 15000 }[complexity];
-    // Asset multiplier on retainer
     var assetRetainerMult = { low: 0.9, mid: 1.0, high: 1.25, vhigh: 1.5 }[assets];
     retainerPP = Math.round(retainerPP * assetRetainerMult);
     var retainerTotal = retainerPP * 2;
 
-    // Hourly rate range
     var hourlyRate = { simple: 375, moderate: 450, complex: 550 }[complexity];
-    // Estimated hours per attorney
     var baseHours = children ? 30 : 20;
     var complexityHoursMult = { simple: 0.7, moderate: 1.0, complex: 1.5 }[complexity];
-    var agreementHoursMult = { high: 0.7, some: 1.0, low: 1.4 }[agreement];
     var assetHoursMult = { low: 0.85, mid: 1.0, high: 1.2, vhigh: 1.4 }[assets];
-    var hoursPerAtty = Math.round(baseHours * complexityHoursMult * agreementHoursMult * assetHoursMult);
-    var hourlyFees = hoursPerAtty * hourlyRate * 2; // two attorneys
+    var hoursPerAtty = Math.round(baseHours * complexityHoursMult * 1.0 * assetHoursMult);
+    var hourlyFees = hoursPerAtty * hourlyRate * 2;
 
-    // Court and filing
     var courtFees = children ? 850 : 550;
 
-    // Expert costs
     var expertCosts = 0;
     if (complexity === 'complex' || assets === 'high' || assets === 'vhigh') {
       expertCosts = { low: 1500, mid: 3000, high: 5000, vhigh: 8000 }[assets];
     }
 
     var litTotal = retainerTotal + hourlyFees + courtFees + expertCosts;
-
-    // Litigation range (± 20%)
     var litLow = Math.round(litTotal * 0.8);
     var litHigh = Math.round(litTotal * 1.2);
 
-    // Timeline
-    var litMonths = { simple: '6–10', moderate: '8–14', complex: '12–24' }[complexity];
-    if (agreement === 'low') litMonths = { simple: '8–14', moderate: '12–18', complex: '18–36' }[complexity];
+    var litMonths = { simple: '6\u201310', moderate: '8\u201314', complex: '12\u201324' }[complexity];
 
-    // ── Mediation estimates ──
-    var medBase = children ? 8500 : 6500;
-    var sessions = children ? 7 : 5;
-    var draftHours = children ? 8 : 6;
+    // ── Mediation estimates (fixed pricing by asset tier + complexity) ──
+    var medTotal, sessions, draftHours, commsText, medTimeline;
 
-    // Add premium for complex / high-asset (extra sessions possible)
-    var medExtra = 0;
-    if (complexity === 'complex') medExtra += 1500;
-    if (assets === 'high') medExtra += 1000;
-    if (assets === 'vhigh') medExtra += 2500;
-    if (agreement === 'low') medExtra += 1000;
+    // Base prices by asset tier (Simple complexity)
+    if (children) {
+      medTotal = { low: 7500, mid: 8500, high: 9500, vhigh: 10500 }[assets];
+      sessions = 7;
+      draftHours = 8;
+      medTimeline = '2\u20134 months';
+    } else {
+      medTotal = { low: 5500, mid: 6500, high: 7500, vhigh: 8500 }[assets];
+      sessions = 5;
+      draftHours = 6;
+      medTimeline = '6\u201312 weeks';
+    }
 
-    var medTotal = medBase + medExtra;
-    var medTimeline = children ? '2–4 months' : '6–12 weeks';
-    if (agreement === 'low') medTimeline = children ? '3–5 months' : '2–4 months';
+    // Complexity adds sessions: Moderate +1, Complex +2 (at $750/session)
+    var extraSessions = { simple: 0, moderate: 1, complex: 2 }[complexity];
+    sessions += extraSessions;
+    medTotal += extraSessions * 750;
+
+    // Complex + Over $5M: also adds +2 draft hours (no extra charge)
+    if (complexity === 'complex' && assets === 'vhigh') {
+      draftHours += 2;
+    }
+
+    // Communications text scales with asset level
+    if (assets === 'low') {
+      commsText = 'Reasonable emails and phone calls';
+    } else {
+      commsText = 'Increased communications, possible financial professional consultations';
+    }
 
     // Savings
     var savingsLow = litLow - medTotal;
@@ -1349,20 +1347,18 @@
     document.getElementById('rlm-lit-expert').textContent = expertCosts > 0 ? fmt(expertCosts) : 'May not apply';
     document.getElementById('rlm-lit-timeline').textContent = litMonths + ' months';
 
-    // Mediation card
-    document.getElementById('rlm-med-total').textContent = medExtra > 0 ? fmtRange(medBase, medTotal) : fmt(medBase);
-    document.getElementById('rlm-med-sessions').textContent = sessions + ' × 90-minute sessions' + (medExtra > 0 ? '+' : '');
+    // Mediation card (fixed price, no range)
+    document.getElementById('rlm-med-total').textContent = fmt(medTotal);
+    document.getElementById('rlm-med-sessions').textContent = sessions + ' \u00D7 90-minute sessions';
     document.getElementById('rlm-med-summaries').textContent = 'Included';
     document.getElementById('rlm-med-agreement').textContent = 'Included (' + draftHours + ' hrs)';
-    document.getElementById('rlm-med-comms').textContent = 'Included';
+    document.getElementById('rlm-med-comms').textContent = commsText;
     document.getElementById('rlm-med-timeline').textContent = medTimeline;
 
     // Bars
-    var maxVal = litHigh;
     document.getElementById('rlm-bar-lit-val').textContent = fmtRange(litLow, litHigh);
-    document.getElementById('rlm-bar-med-val').textContent = medExtra > 0 ? fmtRange(medBase, medTotal) : fmt(medBase);
+    document.getElementById('rlm-bar-med-val').textContent = fmt(medTotal);
 
-    // Animate bars with slight delay
     setTimeout(function() {
       document.getElementById('rlm-bar-lit').style.width = '100%';
       document.getElementById('rlm-bar-med').style.width = Math.round((medTotal / litHigh) * 100) + '%';
@@ -1373,7 +1369,7 @@
       sessions + ' mediation sessions (90 min each)',
       'Written summary after each session',
       'Draft separation agreement (' + draftHours + ' hours)',
-      'Reasonable emails and phone calls',
+      commsText,
       'All meetings via Zoom or phone',
       'Bilingual service (English & Spanish)'
     ];
@@ -1390,7 +1386,8 @@
     document.getElementById('rlm-includes-list').innerHTML = includesHTML;
 
     // ── Wellbeing impact section ──
-    var contentious = agreement === 'low' ? 'high' : (agreement === 'some' ? 'moderate' : 'low');
+    // Fixed at "moderate" contentiousness (some disagreements assumed)
+    var contentious = 'moderate';
 
     // Risk data: [label, litigationLevel, litigationWidth, mediationLevel, mediationWidth]
     // Levels: vlow, low, med, high
