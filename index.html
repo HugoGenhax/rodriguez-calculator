@@ -99,11 +99,10 @@
   }
   .rlm-calc__form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
   @media (max-width: 600px) {
-    .rlm-calc__form-grid { grid-template-columns: 1fr; }
     .rlm-calc__form { padding: 28px 20px; }
   }
   .rlm-calc__field {
@@ -512,6 +511,30 @@
     margin-top: 14px;
     font-style: italic;
     position: relative;
+  }
+
+  /* ── Progress bar for recalculation ── */
+  .rlm-calc__progress {
+    height: 3px;
+    background: var(--sand);
+    border-radius: 2px;
+    margin: -8px 0 16px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .rlm-calc__progress--active {
+    opacity: 1;
+  }
+  .rlm-calc__progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--navy-light), var(--gold));
+    border-radius: 2px;
+    transition: width 0.45s ease-out;
+  }
+  .rlm-calc__progress--active .rlm-calc__progress-bar {
+    width: 100%;
   }
 
   /* ── Wellbeing Impact Section ── */
@@ -929,10 +952,15 @@
 
       <!-- Calculate button -->
       <div class="rlm-calc__field rlm-calc__field--full">
-        <button type="button" class="rlm-calc__btn" onclick="rlmCalculate()">Calculate Costs & Family Impact</button>
+        <button type="button" class="rlm-calc__btn" id="rlm-calc-btn" onclick="rlmCalculate()">Calculate Costs & Family Impact</button>
       </div>
 
     </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="rlm-calc__progress" id="rlm-progress">
+    <div class="rlm-calc__progress-bar" id="rlm-progress-bar"></div>
   </div>
 
   <!-- Results -->
@@ -1515,36 +1543,79 @@
 
     // Show results
     var resultsEl = document.getElementById('rlm-results');
-    resultsEl.classList.add('rlm-calc__results--visible');
-    // Reset animation
-    resultsEl.style.animation = 'none';
-    resultsEl.offsetHeight; // trigger reflow
-    resultsEl.style.animation = '';
+    var isFirstCalc = !resultsEl.classList.contains('rlm-calc__results--visible');
 
-    // Scroll to results smoothly
-    setTimeout(function() {
-      resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 150);
+    if (isFirstCalc) {
+      // First time: show results with animation, scroll down once
+      resultsEl.classList.add('rlm-calc__results--visible');
+      resultsEl.style.animation = 'none';
+      resultsEl.offsetHeight;
+      resultsEl.style.animation = '';
+      setTimeout(function() {
+        resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+      // Enable auto-recalculate on future input changes
+      rlmEnableAutoRecalc();
+    } else {
+      // Subsequent: show progress bar, no scroll
+      rlmFlashProgress();
+    }
   };
 
+  // ── Progress bar flash ──
+  function rlmFlashProgress() {
+    var prog = document.getElementById('rlm-progress');
+    var bar = document.getElementById('rlm-progress-bar');
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    prog.classList.add('rlm-calc__progress--active');
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        bar.style.transition = 'width 0.45s ease-out';
+        bar.style.width = '100%';
+        setTimeout(function() {
+          prog.classList.remove('rlm-calc__progress--active');
+          bar.style.width = '0%';
+        }, 600);
+      });
+    });
+  }
+
+  // ── Auto-recalculate on input changes ──
+  var autoRecalcEnabled = false;
+  function rlmEnableAutoRecalc() {
+    if (autoRecalcEnabled) return;
+    autoRecalcEnabled = true;
+    var inputs = [
+      document.getElementById('rlm-complexity'),
+      document.getElementById('rlm-assets')
+    ];
+    inputs.forEach(function(el) {
+      if (el) el.addEventListener('change', function() { window.rlmCalculate(); });
+    });
+    // Children toggle buttons
+    var toggles = document.querySelectorAll('.rlm-calc__toggle[data-field="children"]');
+    toggles.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setTimeout(function() { window.rlmCalculate(); }, 50);
+      });
+    });
+  }
+
   // ── Iframe auto-resize ──
-  // Sends height to parent window so Squarespace iframe can resize
   function rlmPostHeight() {
     var height = document.getElementById('rlm-cost-calculator').scrollHeight + 40;
     window.parent.postMessage({ type: 'rlm-calc-resize', height: height }, '*');
   }
-  // Post height on load, resize, and after calculations
   window.addEventListener('load', function() { setTimeout(rlmPostHeight, 300); });
   window.addEventListener('resize', rlmPostHeight);
 
-  // Override calculate to also post height after results render
   var _origCalc = window.rlmCalculate;
   window.rlmCalculate = function() {
     _origCalc();
     setTimeout(rlmPostHeight, 600);
   };
 
-  // Override methodology toggle to also post height
   var _origMeth = window.rlmToggleMeth;
   window.rlmToggleMeth = function(btn) {
     _origMeth(btn);
