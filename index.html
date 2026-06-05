@@ -43,6 +43,7 @@
     padding: 0 20px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    position: relative;
   }
 
   /* ── Header (ultra-compact) ── */
@@ -91,10 +92,9 @@
   /* ── Floating input panel ── */
   .rlm-calc__float-panel {
     display: none;
-    position: fixed;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+    position: absolute;
+    right: -260px;
+    top: 0;
     width: 240px;
     background: var(--white);
     border: 1px solid var(--border);
@@ -102,15 +102,15 @@
     padding: 20px 18px;
     box-shadow: 0 8px 32px rgba(43,76,126,0.12);
     z-index: 100;
-    transition: opacity 0.25s, transform 0.25s;
+    transition: opacity 0.25s;
   }
   .rlm-calc__float-panel--visible {
     display: block;
-    animation: rlm-slideIn 0.3s ease;
+    animation: rlm-fadeIn 0.3s ease;
   }
-  @keyframes rlm-slideIn {
-    from { opacity: 0; transform: translateY(-50%) translateX(20px); }
-    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  @keyframes rlm-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   .rlm-calc__float-title {
     font-size: 11px;
@@ -234,16 +234,16 @@
     font-style: italic;
   }
   @media (max-width: 1200px) {
-    .rlm-calc__float-panel { right: 8px; width: 220px; padding: 16px 14px; }
+    .rlm-calc__float-panel { right: -230px; width: 220px; padding: 16px 14px; }
   }
   /* Mobile: full-width footer bar */
   @media (max-width: 960px) {
     .rlm-calc__float-panel {
+      position: fixed;
       right: 0;
       left: 0;
       bottom: 0;
-      top: auto;
-      transform: none;
+      top: auto !important;
       width: 100%;
       border-radius: 16px 16px 0 0;
       padding: 14px 20px;
@@ -255,7 +255,7 @@
       gap: 10px;
       align-items: center;
     }
-    @keyframes rlm-slideIn {
+    @keyframes rlm-fadeIn {
       from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
     }
@@ -1790,9 +1790,11 @@
 
   // ── Float panel: scroll-based show/hide ──
   var parentScrollOffset = 0;
+  var parentViewportHeight = 800;
   window.addEventListener('message', function(e) {
     if (e.data && e.data.type === 'rlm-parent-scroll') {
       parentScrollOffset = e.data.iframeTopOffset;
+      if (e.data.viewportHeight) parentViewportHeight = e.data.viewportHeight;
       updateFloatPanel();
     }
   });
@@ -1803,28 +1805,49 @@
     var formEl = document.getElementById('rlm-form-section');
     if (!formEl || !panel) return;
 
-    // Form bottom position relative to parent viewport
+    // Check if we're on mobile (panel uses position:fixed via CSS)
+    if (window.innerWidth <= 960) {
+      // On mobile, just show/hide based on form visibility
+      var formBottom = formEl.offsetTop + formEl.offsetHeight;
+      var formVisibleBottom = formBottom + parentScrollOffset;
+      if (formVisibleBottom < -20) {
+        panel.classList.add('rlm-calc__float-panel--visible');
+      } else {
+        panel.classList.remove('rlm-calc__float-panel--visible');
+      }
+      return;
+    }
+
+    // Desktop: position:absolute, reposition to follow viewport
     var formBottom = formEl.offsetTop + formEl.offsetHeight;
     var formVisibleBottom = formBottom + parentScrollOffset;
 
-    // Show panel when form scrolls out of view
     if (formVisibleBottom < -20) {
       panel.classList.add('rlm-calc__float-panel--visible');
+      // Calculate panel position to center it in the visible viewport area
+      var viewportCenter = -parentScrollOffset + (parentViewportHeight / 2);
+      var panelHeight = panel.offsetHeight || 400;
+      var panelTop = viewportCenter - (panelHeight / 2);
+      // Clamp so it doesn't go above the results or below the content
+      var minTop = document.getElementById('rlm-section-costs').offsetTop;
+      var maxTop = document.getElementById('rlm-cost-calculator').scrollHeight - panelHeight - 40;
+      panelTop = Math.max(minTop, Math.min(maxTop, panelTop));
+      panel.style.top = panelTop + 'px';
     } else {
       panel.classList.remove('rlm-calc__float-panel--visible');
     }
 
-    // Update nav button text based on which section is near viewport
+    // Update nav button text
     var navBtn = document.getElementById('rlm-fp-nav');
     if (!navBtn) return;
     var wellbeingEl = document.getElementById('rlm-section-wellbeing');
     if (wellbeingEl) {
       var wellbeingTop = wellbeingEl.offsetTop + parentScrollOffset;
       if (wellbeingTop > 200) {
-        navBtn.textContent = 'See family impact ↓';
+        navBtn.textContent = 'See family impact \u2193';
         navBtn.setAttribute('data-target', 'rlm-section-wellbeing');
       } else {
-        navBtn.textContent = 'See cost comparison ↑';
+        navBtn.textContent = 'See cost comparison \u2191';
         navBtn.setAttribute('data-target', 'rlm-section-costs');
       }
     }
@@ -1912,16 +1935,21 @@
 
   // ── Iframe height communication ──
   function rlmPostHeight() {
-    var height = document.getElementById('rlm-cost-calculator').scrollHeight + 40;
+    var height = document.getElementById('rlm-cost-calculator').scrollHeight + 80;
     window.parent.postMessage({ type: 'rlm-calc-resize', height: height }, '*');
   }
-  window.addEventListener('load', function() { setTimeout(rlmPostHeight, 500); });
+  window.addEventListener('load', function() { 
+    setTimeout(rlmPostHeight, 500);
+    setTimeout(rlmPostHeight, 1500);
+  });
   window.addEventListener('resize', rlmPostHeight);
 
   var _origCalc = window.rlmCalculate;
   window.rlmCalculate = function() {
     _origCalc();
-    setTimeout(rlmPostHeight, 600);
+    setTimeout(rlmPostHeight, 300);
+    setTimeout(rlmPostHeight, 800);
+    setTimeout(rlmPostHeight, 1500);
   };
 
   var _origMeth = window.rlmToggleMeth;
