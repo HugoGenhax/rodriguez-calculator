@@ -91,9 +91,10 @@
   /* ── Floating input panel ── */
   .rlm-calc__float-panel {
     display: none;
-    position: absolute;
+    position: fixed;
     right: 20px;
-    top: 0;
+    top: 50%;
+    transform: translateY(-50%);
     width: 220px;
     background: var(--white);
     border: 1px solid var(--border);
@@ -105,11 +106,14 @@
   .rlm-calc__float-panel--visible {
     display: block;
   }
-  /* Mobile: positioned at bottom of visible area by JS */
+  /* Mobile: full-width bottom bar */
   @media (max-width: 960px) {
     .rlm-calc__float-panel {
       right: 0;
       left: 0;
+      bottom: 0;
+      top: auto;
+      transform: none;
       width: 100%;
       border-radius: 16px 16px 0 0;
       padding: 14px 20px;
@@ -1711,14 +1715,11 @@
     var resultsEl = document.getElementById('rlm-results');
     var isFirstCalc = !resultsEl.classList.contains('rlm-calc__results--visible');
 
-    // Show results
-    var resultsEl = document.getElementById('rlm-results');
-    var isFirstCalc = !resultsEl.classList.contains('rlm-calc__results--visible');
-
     if (isFirstCalc) {
       resultsEl.classList.add('rlm-calc__results--visible');
-      calculatedOnce = true;
-      // Scroll parent to results
+      // Show floating panel immediately
+      document.getElementById('rlm-float-panel').classList.add('rlm-calc__float-panel--visible');
+      // Scroll parent to results (if parent script is listening)
       var resultsOffset = document.getElementById('rlm-section-costs').offsetTop - 20;
       window.parent.postMessage({ type: 'rlm-calc-scroll', offset: resultsOffset }, '*');
       rlmEnableAutoRecalc();
@@ -1728,69 +1729,6 @@
     }
     setTimeout(rlmPostHeight, 300);
   };
-
-  var calculatedOnce = false;
-
-  // ── Parent scroll listener ──
-  var parentScrollOffset = 0;
-  var parentViewportHeight = 800;
-  window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'rlm-parent-scroll') {
-      parentScrollOffset = e.data.iframeTopOffset;
-      if (e.data.viewportHeight) parentViewportHeight = e.data.viewportHeight;
-      updateFloatPanel();
-    }
-  });
-
-  // ── Float panel positioning ──
-  function updateFloatPanel() {
-    if (!calculatedOnce) return;
-    var panel = document.getElementById('rlm-float-panel');
-    var formEl = document.getElementById('rlm-form-section');
-    if (!formEl || !panel) return;
-
-    var formBottom = formEl.offsetTop + formEl.offsetHeight;
-    var formVisibleBottom = formBottom + parentScrollOffset;
-
-    // Show when form is near or past top of viewport
-    if (formVisibleBottom < 100) {
-      panel.classList.add('rlm-calc__float-panel--visible');
-
-      var isMobile = window.innerWidth <= 960;
-      var panelHeight = panel.offsetHeight || 400;
-
-      if (isMobile) {
-        // Mobile: pin to bottom of visible viewport area
-        var bottomPos = -parentScrollOffset + parentViewportHeight - panelHeight;
-        panel.style.top = bottomPos + 'px';
-      } else {
-        // Desktop: center in visible viewport area
-        var viewportCenter = -parentScrollOffset + (parentViewportHeight / 2);
-        var panelTop = viewportCenter - (panelHeight / 2);
-        var minTop = document.getElementById('rlm-section-costs').offsetTop;
-        var maxTop = document.getElementById('rlm-cost-calculator').scrollHeight - panelHeight - 40;
-        panelTop = Math.max(minTop, Math.min(maxTop, panelTop));
-        panel.style.top = panelTop + 'px';
-      }
-    } else {
-      panel.classList.remove('rlm-calc__float-panel--visible');
-    }
-
-    // Update nav button text
-    var navBtn = document.getElementById('rlm-fp-nav');
-    if (!navBtn) return;
-    var wellbeingEl = document.getElementById('rlm-section-wellbeing');
-    if (wellbeingEl) {
-      var wellbeingTop = wellbeingEl.offsetTop + parentScrollOffset;
-      if (wellbeingTop > 200) {
-        navBtn.textContent = 'See family impact \u2193';
-        navBtn.setAttribute('data-target', 'rlm-section-wellbeing');
-      } else {
-        navBtn.textContent = 'See cost comparison \u2191';
-        navBtn.setAttribute('data-target', 'rlm-section-costs');
-      }
-    }
-  }
 
   // ── Float panel navigation ──
   window.rlmFloatNav = function() {
