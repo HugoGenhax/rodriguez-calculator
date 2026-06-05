@@ -38,11 +38,87 @@
   .rlm-calc {
     font-family: var(--font-body);
     color: var(--text);
-    max-width: 860px;
+    max-width: 1120px;
     margin: 0 auto;
     padding: 0 20px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Two-column layout ── */
+  .rlm-calc__layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  .rlm-calc__layout-left {
+    position: sticky;
+    top: 20px;
+  }
+  .rlm-calc__layout-right {
+    min-width: 0;
+  }
+  @media (max-width: 820px) {
+    .rlm-calc__layout {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .rlm-calc__layout-left {
+      position: static;
+    }
+  }
+
+  /* ── Sticky CTA pill ── */
+  .rlm-calc__sticky-cta {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  .rlm-calc__sticky-cta a {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    background: var(--navy);
+    padding: 18px 14px;
+    border-radius: 12px 0 0 12px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(43,76,126,0.25);
+    transition: background 0.2s, padding 0.2s;
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    writing-mode: vertical-rl;
+  }
+  .rlm-calc__sticky-cta a:hover {
+    background: var(--navy-dark);
+    padding: 18px 18px;
+  }
+  @media (max-width: 820px) {
+    .rlm-calc__sticky-cta a {
+      writing-mode: horizontal-tb;
+      border-radius: 12px 12px 0 0;
+      position: fixed;
+      right: auto;
+      left: 50%;
+      top: auto;
+      bottom: 0;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      font-size: 14px;
+      box-shadow: 0 -4px 16px rgba(43,76,126,0.25);
+    }
+    .rlm-calc__sticky-cta a:hover {
+      padding: 14px 24px;
+    }
   }
 
   /* ── Header ── */
@@ -916,52 +992,68 @@
     <p class="rlm-calc__subtitle">Litigation doesn't just drain your finances — it takes a measurable toll on your mental health and your children's wellbeing. Most divorce tools ignore this. This one doesn't. See how mediation compares on both fronts.</p>
   </div>
 
-  <!-- Form -->
-  <div class="rlm-calc__form">
-    <div class="rlm-calc__form-grid">
+  <!-- Sticky consultation pill -->
+  <div class="rlm-calc__sticky-cta" id="rlm-sticky-cta" style="display:none;">
+    <a href="https://www.rodriguezlawandmediation.com/contact">Schedule a Consultation</a>
+  </div>
 
-      <!-- Children -->
-      <div class="rlm-calc__field">
-        <label class="rlm-calc__label">Are children involved?</label>
-        <div class="rlm-calc__toggle-group">
-          <button type="button" class="rlm-calc__toggle rlm-calc__toggle--active" data-field="children" data-value="no" onclick="rlmSetToggle(this)">No Children</button>
-          <button type="button" class="rlm-calc__toggle" data-field="children" data-value="yes" onclick="rlmSetToggle(this)">With Children</button>
+  <!-- Two-column layout -->
+  <div class="rlm-calc__layout">
+
+    <!-- LEFT: Inputs -->
+    <div class="rlm-calc__layout-left">
+
+      <!-- Form -->
+      <div class="rlm-calc__form">
+        <div class="rlm-calc__form-grid">
+
+          <!-- Children -->
+          <div class="rlm-calc__field">
+            <label class="rlm-calc__label">Are children involved?</label>
+            <div class="rlm-calc__toggle-group">
+              <button type="button" class="rlm-calc__toggle rlm-calc__toggle--active" data-field="children" data-value="no" onclick="rlmSetToggle(this)">No Children</button>
+              <button type="button" class="rlm-calc__toggle" data-field="children" data-value="yes" onclick="rlmSetToggle(this)">With Children</button>
+            </div>
+          </div>
+
+          <!-- Complexity -->
+          <div class="rlm-calc__field">
+            <label class="rlm-calc__label">Case complexity</label>
+            <select class="rlm-calc__select" id="rlm-complexity">
+              <option value="simple">Simple — Few shared assets</option>
+              <option value="moderate" selected>Moderate — Home, savings, retirement</option>
+              <option value="complex">Complex — Multiple properties, business</option>
+            </select>
+          </div>
+
+          <!-- Assets -->
+          <div class="rlm-calc__field">
+            <label class="rlm-calc__label">Combined marital assets <span class="rlm-calc__label-hint">(approximate)</span></label>
+            <select class="rlm-calc__select" id="rlm-assets">
+              <option value="low">Under $500,000</option>
+              <option value="mid" selected>$500,000 – $2,000,000</option>
+              <option value="high">$2,000,000 – $5,000,000</option>
+              <option value="vhigh">Over $5,000,000</option>
+            </select>
+          </div>
+
+          <!-- Calculate button -->
+          <div class="rlm-calc__field rlm-calc__field--full">
+            <button type="button" class="rlm-calc__btn" id="rlm-calc-btn" onclick="rlmCalculate()">Calculate Costs & Family Impact</button>
+          </div>
+
         </div>
       </div>
 
-      <!-- Complexity -->
-      <div class="rlm-calc__field">
-        <label class="rlm-calc__label">Case complexity</label>
-        <select class="rlm-calc__select" id="rlm-complexity">
-          <option value="simple">Simple — Few shared assets</option>
-          <option value="moderate" selected>Moderate — Home, savings, retirement</option>
-          <option value="complex">Complex — Multiple properties, business</option>
-        </select>
-      </div>
-
-      <!-- Assets -->
-      <div class="rlm-calc__field">
-        <label class="rlm-calc__label">Combined marital assets <span class="rlm-calc__label-hint">(approximate)</span></label>
-        <select class="rlm-calc__select" id="rlm-assets">
-          <option value="low">Under $500,000</option>
-          <option value="mid" selected>$500,000 – $2,000,000</option>
-          <option value="high">$2,000,000 – $5,000,000</option>
-          <option value="vhigh">Over $5,000,000</option>
-        </select>
-      </div>
-
-      <!-- Calculate button -->
-      <div class="rlm-calc__field rlm-calc__field--full">
-        <button type="button" class="rlm-calc__btn" id="rlm-calc-btn" onclick="rlmCalculate()">Calculate Costs & Family Impact</button>
+      <!-- Progress bar -->
+      <div class="rlm-calc__progress" id="rlm-progress">
+        <div class="rlm-calc__progress-bar" id="rlm-progress-bar"></div>
       </div>
 
     </div>
-  </div>
 
-  <!-- Progress bar -->
-  <div class="rlm-calc__progress" id="rlm-progress">
-    <div class="rlm-calc__progress-bar" id="rlm-progress-bar"></div>
-  </div>
+    <!-- RIGHT: Results -->
+    <div class="rlm-calc__layout-right">
 
   <!-- Results -->
   <div class="rlm-calc__results" id="rlm-results">
@@ -1116,6 +1208,9 @@
     </div>
 
   </div>
+
+    </div><!-- .rlm-calc__layout-right -->
+  </div><!-- .rlm-calc__layout -->
 
   <!-- Methodology / Sources expandable section -->
   <div class="rlm-calc__methodology">
@@ -1546,14 +1641,13 @@
     var isFirstCalc = !resultsEl.classList.contains('rlm-calc__results--visible');
 
     if (isFirstCalc) {
-      // First time: show results with animation, scroll down once
+      // First time: show results with animation, no scroll
       resultsEl.classList.add('rlm-calc__results--visible');
       resultsEl.style.animation = 'none';
       resultsEl.offsetHeight;
       resultsEl.style.animation = '';
-      setTimeout(function() {
-        resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 150);
+      // Show sticky CTA
+      document.getElementById('rlm-sticky-cta').style.display = '';
       // Enable auto-recalculate on future input changes
       rlmEnableAutoRecalc();
     } else {
