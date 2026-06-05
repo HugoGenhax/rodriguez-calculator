@@ -48,7 +48,7 @@
   /* ── Header (ultra-compact) ── */
   .rlm-calc__header {
     text-align: center;
-    padding: 12px 20px 12px;
+    padding: 4px 20px 8px;
     position: relative;
   }
   .rlm-calc__header::after {
@@ -231,7 +231,7 @@
   }
   .rlm-calc__form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 14px;
     align-items: end;
   }
@@ -1087,7 +1087,7 @@
     <div class="rlm-calc__form-grid">
 
       <!-- Children -->
-      <div class="rlm-calc__field">
+      <div class="rlm-calc__field rlm-calc__field--full">
         <label class="rlm-calc__label">Are children involved?</label>
         <div class="rlm-calc__toggle-group">
           <button type="button" class="rlm-calc__toggle rlm-calc__toggle--active" data-field="children" data-value="no" onclick="rlmSetToggle(this)">No Children</button>
@@ -1752,8 +1752,8 @@
     var formBottom = formEl.offsetTop + formEl.offsetHeight;
     var formVisibleBottom = formBottom + parentScrollOffset;
 
-    // Show when form scrolls out of view
-    if (formVisibleBottom < -20) {
+    // Show when form is near or past top of viewport
+    if (formVisibleBottom < 100) {
       panel.classList.add('rlm-calc__float-panel--visible');
 
       var isMobile = window.innerWidth <= 960;
