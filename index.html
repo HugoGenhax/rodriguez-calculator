@@ -38,93 +38,17 @@
   .rlm-calc {
     font-family: var(--font-body);
     color: var(--text);
-    max-width: 1120px;
+    max-width: 860px;
     margin: 0 auto;
     padding: 0 20px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── Two-column layout ── */
-  .rlm-calc__layout {
-    display: grid;
-    grid-template-columns: 340px 1fr;
-    gap: 28px;
-    align-items: start;
-  }
-  .rlm-calc__layout-left {
-    position: sticky;
-    top: 20px;
-  }
-  .rlm-calc__layout-right {
-    min-width: 0;
-  }
-  @media (max-width: 820px) {
-    .rlm-calc__layout {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    .rlm-calc__layout-left {
-      position: static;
-    }
-  }
-
-  /* ── Sticky CTA pill ── */
-  .rlm-calc__sticky-cta {
-    position: fixed;
-    right: 24px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 100;
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-  }
-  .rlm-calc__sticky-cta a {
-    display: block;
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: var(--white);
-    background: var(--navy);
-    padding: 18px 14px;
-    border-radius: 12px 0 0 12px;
-    text-decoration: none;
-    box-shadow: 0 4px 16px rgba(43,76,126,0.25);
-    transition: background 0.2s, padding 0.2s;
-    position: fixed;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    writing-mode: vertical-rl;
-  }
-  .rlm-calc__sticky-cta a:hover {
-    background: var(--navy-dark);
-    padding: 18px 18px;
-  }
-  @media (max-width: 820px) {
-    .rlm-calc__sticky-cta a {
-      writing-mode: horizontal-tb;
-      border-radius: 12px 12px 0 0;
-      position: fixed;
-      right: auto;
-      left: 50%;
-      top: auto;
-      bottom: 0;
-      transform: translateX(-50%);
-      padding: 12px 24px;
-      font-size: 14px;
-      box-shadow: 0 -4px 16px rgba(43,76,126,0.25);
-    }
-    .rlm-calc__sticky-cta a:hover {
-      padding: 14px 24px;
-    }
-  }
-
-  /* ── Header ── */
+  /* ── Header (compact to fit on one screen) ── */
   .rlm-calc__header {
     text-align: center;
-    padding: 48px 24px 40px;
+    padding: 24px 24px 20px;
     position: relative;
   }
   .rlm-calc__header::after {
@@ -133,7 +57,7 @@
     width: 60px;
     height: 2px;
     background: var(--gold);
-    margin: 24px auto 0;
+    margin: 16px auto 0;
   }
   .rlm-calc__badge {
     display: inline-block;
@@ -150,18 +74,138 @@
   }
   .rlm-calc__title {
     font-family: var(--font-display);
-    font-size: clamp(28px, 4.5vw, 40px);
+    font-size: clamp(24px, 3.5vw, 34px);
     font-weight: 600;
     color: var(--navy-dark);
     line-height: 1.2;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
   .rlm-calc__subtitle {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--text-light);
-    max-width: 560px;
+    max-width: 540px;
     margin: 0 auto;
-    line-height: 1.7;
+    line-height: 1.6;
+  }
+
+  /* ── Floating input panel (desktop only, after first calculate) ── */
+  .rlm-calc__float-panel {
+    display: none;
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 240px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 18px;
+    box-shadow: 0 8px 32px rgba(43,76,126,0.12);
+    z-index: 100;
+    animation: rlm-slideIn 0.3s ease;
+  }
+  .rlm-calc__float-panel--visible {
+    display: block;
+  }
+  @keyframes rlm-slideIn {
+    from { opacity: 0; transform: translateY(-50%) translateX(20px); }
+    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  }
+  .rlm-calc__float-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 14px;
+  }
+  .rlm-calc__float-field {
+    margin-bottom: 12px;
+  }
+  .rlm-calc__float-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+  .rlm-calc__float-select {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text);
+    width: 100%;
+    padding: 8px 28px 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--cream);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%232B4C7E' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+  }
+  .rlm-calc__float-toggles {
+    display: flex;
+    gap: 4px;
+  }
+  .rlm-calc__float-tog {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 7px 4px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--cream);
+    color: var(--text-light);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .rlm-calc__float-tog--active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .rlm-calc__float-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 14px 0;
+  }
+  .rlm-calc__float-cta {
+    display: block;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--navy);
+    border: none;
+    border-radius: 10px;
+    padding: 11px 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .rlm-calc__float-cta:hover {
+    background: var(--navy-dark);
+    color: var(--white);
+  }
+  .rlm-calc__float-spanish {
+    font-size: 10px;
+    color: var(--text-light);
+    text-align: center;
+    margin-top: 8px;
+    font-style: italic;
+  }
+  @media (max-width: 1200px) {
+    .rlm-calc__float-panel { right: 8px; width: 220px; padding: 16px 14px; }
+  }
+  @media (max-width: 960px) {
+    .rlm-calc__float-panel { display: none !important; }
   }
 
   /* ── Form Section ── */
@@ -992,68 +1036,84 @@
     <p class="rlm-calc__subtitle">Litigation doesn't just drain your finances — it takes a measurable toll on your mental health and your children's wellbeing. Most divorce tools ignore this. This one doesn't. See how mediation compares on both fronts.</p>
   </div>
 
-  <!-- Sticky consultation pill -->
-  <div class="rlm-calc__sticky-cta" id="rlm-sticky-cta" style="display:none;">
-    <a href="https://www.rodriguezlawandmediation.com/contact">Schedule a Consultation</a>
+  <!-- Floating input panel (appears after first calculate, desktop only) -->
+  <div class="rlm-calc__float-panel" id="rlm-float-panel">
+    <div class="rlm-calc__float-title">Your scenario</div>
+    <div class="rlm-calc__float-field">
+      <div class="rlm-calc__float-label">Children</div>
+      <div class="rlm-calc__float-toggles">
+        <button class="rlm-calc__float-tog rlm-calc__float-tog--active" id="rlm-fp-no-kids" onclick="rlmFloatToggle('no')">No</button>
+        <button class="rlm-calc__float-tog" id="rlm-fp-yes-kids" onclick="rlmFloatToggle('yes')">Yes</button>
+      </div>
+    </div>
+    <div class="rlm-calc__float-field">
+      <div class="rlm-calc__float-label">Complexity</div>
+      <select class="rlm-calc__float-select" id="rlm-fp-complexity" onchange="rlmFloatSync()">
+        <option value="simple">Simple</option>
+        <option value="moderate" selected>Moderate</option>
+        <option value="complex">Complex</option>
+      </select>
+    </div>
+    <div class="rlm-calc__float-field">
+      <div class="rlm-calc__float-label">Assets</div>
+      <select class="rlm-calc__float-select" id="rlm-fp-assets" onchange="rlmFloatSync()">
+        <option value="low">Under $500K</option>
+        <option value="mid" selected>$500K\u2013$2M</option>
+        <option value="high">$2M\u2013$5M</option>
+        <option value="vhigh">Over $5M</option>
+      </select>
+    </div>
+    <div class="rlm-calc__float-divider"></div>
+    <a href="https://www.rodriguezlawandmediation.com/contact" class="rlm-calc__float-cta">Schedule a Consultation</a>
+    <div class="rlm-calc__float-spanish">Mediaci\u00F3n en espa\u00F1ol</div>
   </div>
 
-  <!-- Two-column layout -->
-  <div class="rlm-calc__layout">
+  <!-- Form -->
+  <div class="rlm-calc__form" id="rlm-form-section">
+    <div class="rlm-calc__form-grid">
 
-    <!-- LEFT: Inputs -->
-    <div class="rlm-calc__layout-left">
-
-      <!-- Form -->
-      <div class="rlm-calc__form">
-        <div class="rlm-calc__form-grid">
-
-          <!-- Children -->
-          <div class="rlm-calc__field">
-            <label class="rlm-calc__label">Are children involved?</label>
-            <div class="rlm-calc__toggle-group">
-              <button type="button" class="rlm-calc__toggle rlm-calc__toggle--active" data-field="children" data-value="no" onclick="rlmSetToggle(this)">No Children</button>
-              <button type="button" class="rlm-calc__toggle" data-field="children" data-value="yes" onclick="rlmSetToggle(this)">With Children</button>
-            </div>
-          </div>
-
-          <!-- Complexity -->
-          <div class="rlm-calc__field">
-            <label class="rlm-calc__label">Case complexity</label>
-            <select class="rlm-calc__select" id="rlm-complexity">
-              <option value="simple">Simple — Few shared assets</option>
-              <option value="moderate" selected>Moderate — Home, savings, retirement</option>
-              <option value="complex">Complex — Multiple properties, business</option>
-            </select>
-          </div>
-
-          <!-- Assets -->
-          <div class="rlm-calc__field">
-            <label class="rlm-calc__label">Combined marital assets <span class="rlm-calc__label-hint">(approximate)</span></label>
-            <select class="rlm-calc__select" id="rlm-assets">
-              <option value="low">Under $500,000</option>
-              <option value="mid" selected>$500,000 – $2,000,000</option>
-              <option value="high">$2,000,000 – $5,000,000</option>
-              <option value="vhigh">Over $5,000,000</option>
-            </select>
-          </div>
-
-          <!-- Calculate button -->
-          <div class="rlm-calc__field rlm-calc__field--full">
-            <button type="button" class="rlm-calc__btn" id="rlm-calc-btn" onclick="rlmCalculate()">Calculate Costs & Family Impact</button>
-          </div>
-
+      <!-- Children -->
+      <div class="rlm-calc__field">
+        <label class="rlm-calc__label">Are children involved?</label>
+        <div class="rlm-calc__toggle-group">
+          <button type="button" class="rlm-calc__toggle rlm-calc__toggle--active" data-field="children" data-value="no" onclick="rlmSetToggle(this)">No Children</button>
+          <button type="button" class="rlm-calc__toggle" data-field="children" data-value="yes" onclick="rlmSetToggle(this)">With Children</button>
         </div>
       </div>
 
-      <!-- Progress bar -->
-      <div class="rlm-calc__progress" id="rlm-progress">
-        <div class="rlm-calc__progress-bar" id="rlm-progress-bar"></div>
+      <!-- Complexity -->
+      <div class="rlm-calc__field">
+        <label class="rlm-calc__label">Case complexity</label>
+        <select class="rlm-calc__select" id="rlm-complexity">
+          <option value="simple">Simple \u2014 Few shared assets</option>
+          <option value="moderate" selected>Moderate \u2014 Home, savings, retirement</option>
+          <option value="complex">Complex \u2014 Multiple properties, business</option>
+        </select>
+      </div>
+
+      <!-- Assets -->
+      <div class="rlm-calc__field">
+        <label class="rlm-calc__label">Combined marital assets <span class="rlm-calc__label-hint">(approximate)</span></label>
+        <select class="rlm-calc__select" id="rlm-assets">
+          <option value="low">Under $500,000</option>
+          <option value="mid" selected>$500,000 \u2013 $2,000,000</option>
+          <option value="high">$2,000,000 \u2013 $5,000,000</option>
+          <option value="vhigh">Over $5,000,000</option>
+        </select>
+      </div>
+
+      <!-- Calculate button -->
+      <div class="rlm-calc__field rlm-calc__field--full">
+        <button type="button" class="rlm-calc__btn" id="rlm-calc-btn" onclick="rlmCalculate()">Calculate Costs & Family Impact</button>
       </div>
 
     </div>
+  </div>
 
-    <!-- RIGHT: Results -->
-    <div class="rlm-calc__layout-right">
+  <!-- Progress bar -->
+  <div class="rlm-calc__progress" id="rlm-progress">
+    <div class="rlm-calc__progress-bar" id="rlm-progress-bar"></div>
+  </div>
 
   <!-- Results -->
   <div class="rlm-calc__results" id="rlm-results">
@@ -1208,9 +1268,6 @@
     </div>
 
   </div>
-
-    </div><!-- .rlm-calc__layout-right -->
-  </div><!-- .rlm-calc__layout -->
 
   <!-- Methodology / Sources expandable section -->
   <div class="rlm-calc__methodology">
@@ -1640,21 +1697,54 @@
     var resultsEl = document.getElementById('rlm-results');
     var isFirstCalc = !resultsEl.classList.contains('rlm-calc__results--visible');
 
+    // Show results
+    var resultsEl = document.getElementById('rlm-results');
+    var isFirstCalc = !resultsEl.classList.contains('rlm-calc__results--visible');
+
     if (isFirstCalc) {
-      // First time: show results with animation, no scroll
       resultsEl.classList.add('rlm-calc__results--visible');
       resultsEl.style.animation = 'none';
       resultsEl.offsetHeight;
       resultsEl.style.animation = '';
-      // Show sticky CTA
-      document.getElementById('rlm-sticky-cta').style.display = '';
-      // Enable auto-recalculate on future input changes
+      // Show floating panel (desktop only via CSS)
+      document.getElementById('rlm-float-panel').classList.add('rlm-calc__float-panel--visible');
+      // Enable auto-recalculate on main form changes
       rlmEnableAutoRecalc();
     } else {
-      // Subsequent: show progress bar, no scroll
       rlmFlashProgress();
     }
   };
+
+  // ── Floating panel sync ──
+  window.rlmFloatToggle = function(val) {
+    state.children = val;
+    // Sync floating panel toggles
+    document.getElementById('rlm-fp-no-kids').classList.toggle('rlm-calc__float-tog--active', val === 'no');
+    document.getElementById('rlm-fp-yes-kids').classList.toggle('rlm-calc__float-tog--active', val === 'yes');
+    // Sync main form toggles
+    var mainToggles = document.querySelectorAll('.rlm-calc__toggle[data-field="children"]');
+    mainToggles.forEach(function(btn) {
+      btn.classList.toggle('rlm-calc__toggle--active', btn.getAttribute('data-value') === val);
+    });
+    window.rlmCalculate();
+  };
+
+  window.rlmFloatSync = function() {
+    // Sync floating panel values to main form
+    document.getElementById('rlm-complexity').value = document.getElementById('rlm-fp-complexity').value;
+    document.getElementById('rlm-assets').value = document.getElementById('rlm-fp-assets').value;
+    window.rlmCalculate();
+  };
+
+  // Sync main form changes to floating panel
+  function rlmSyncToFloat() {
+    var fpComp = document.getElementById('rlm-fp-complexity');
+    var fpAssets = document.getElementById('rlm-fp-assets');
+    if (fpComp) fpComp.value = document.getElementById('rlm-complexity').value;
+    if (fpAssets) fpAssets.value = document.getElementById('rlm-assets').value;
+    document.getElementById('rlm-fp-no-kids').classList.toggle('rlm-calc__float-tog--active', state.children === 'no');
+    document.getElementById('rlm-fp-yes-kids').classList.toggle('rlm-calc__float-tog--active', state.children === 'yes');
+  }
 
   // ── Progress bar flash ──
   function rlmFlashProgress() {
@@ -1685,23 +1775,31 @@
       document.getElementById('rlm-assets')
     ];
     inputs.forEach(function(el) {
-      if (el) el.addEventListener('change', function() { window.rlmCalculate(); });
+      if (el) el.addEventListener('change', function() {
+        rlmSyncToFloat();
+        window.rlmCalculate();
+      });
     });
-    // Children toggle buttons
     var toggles = document.querySelectorAll('.rlm-calc__toggle[data-field="children"]');
     toggles.forEach(function(btn) {
       btn.addEventListener('click', function() {
-        setTimeout(function() { window.rlmCalculate(); }, 50);
+        setTimeout(function() { rlmSyncToFloat(); window.rlmCalculate(); }, 50);
       });
     });
   }
 
-  // ── Iframe auto-resize ──
+  // ── Iframe height (post generous initial height, suppress scroll) ──
   function rlmPostHeight() {
     var height = document.getElementById('rlm-cost-calculator').scrollHeight + 40;
     window.parent.postMessage({ type: 'rlm-calc-resize', height: height }, '*');
   }
-  window.addEventListener('load', function() { setTimeout(rlmPostHeight, 300); });
+  // Post a large initial height so iframe doesn't need to grow on first calculate
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      var h = Math.max(document.getElementById('rlm-cost-calculator').scrollHeight + 40, 4500);
+      window.parent.postMessage({ type: 'rlm-calc-resize', height: h }, '*');
+    }, 300);
+  });
   window.addEventListener('resize', rlmPostHeight);
 
   var _origCalc = window.rlmCalculate;
