@@ -93,9 +93,9 @@
   .rlm-calc__float-panel {
     display: none;
     position: absolute;
-    right: -260px;
+    right: 0;
     top: 0;
-    width: 240px;
+    width: 220px;
     background: var(--white);
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -234,7 +234,7 @@
     font-style: italic;
   }
   @media (max-width: 1200px) {
-    .rlm-calc__float-panel { right: -230px; width: 220px; padding: 16px 14px; }
+    .rlm-calc__float-panel { right: 0; width: 200px; padding: 14px 12px; }
   }
   /* Mobile: full-width footer bar */
   @media (max-width: 960px) {
@@ -1935,7 +1935,7 @@
 
   // ── Iframe height communication ──
   function rlmPostHeight() {
-    var height = document.getElementById('rlm-cost-calculator').scrollHeight + 80;
+    var height = document.getElementById('rlm-cost-calculator').scrollHeight + 200;
     window.parent.postMessage({ type: 'rlm-calc-resize', height: height }, '*');
   }
   window.addEventListener('load', function() { 
