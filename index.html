@@ -48,7 +48,7 @@
   /* ── Header (ultra-compact) ── */
   .rlm-calc__header {
     text-align: center;
-    padding: 12px 20px 12px;
+    padding: 4px 20px 8px;
     position: relative;
   }
   .rlm-calc__header::after {
@@ -57,7 +57,7 @@
     width: 40px;
     height: 2px;
     background: var(--gold);
-    margin: 10px auto 0;
+    margin: 8px auto 0;
   }
   .rlm-calc__badge {
     display: inline-block;
@@ -279,7 +279,7 @@
   }
   .rlm-calc__form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 14px;
     align-items: end;
   }
@@ -1137,7 +1137,7 @@
     <div class="rlm-calc__form-grid">
 
       <!-- Children -->
-      <div class="rlm-calc__field">
+      <div class="rlm-calc__field rlm-calc__field--full">
         <label class="rlm-calc__label">Are children involved?</label>
         <div class="rlm-calc__toggle-group">
           <button type="button" class="rlm-calc__toggle rlm-calc__toggle--active" data-field="children" data-value="no" onclick="rlmSetToggle(this)">No Children</button>
