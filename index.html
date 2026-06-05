@@ -91,10 +91,9 @@
   /* ── Floating input panel ── */
   .rlm-calc__float-panel {
     display: none;
-    position: fixed;
+    position: absolute;
     right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0;
     width: 220px;
     background: var(--white);
     border: 1px solid var(--border);
@@ -1045,18 +1044,9 @@
 </head>
 <body>
 
-<div class="rlm-calc" id="rlm-cost-calculator">
-
-  <!-- Header -->
-  <div class="rlm-calc__header">
-    <div class="rlm-calc__badge">NYC Divorce Comparison Tool</div>
-    <h2 class="rlm-calc__title">Divorce Cost & Impact Calculator</h2>
-    <p class="rlm-calc__subtitle">Litigation doesn't just drain your finances — it takes a measurable toll on your mental health and your children's wellbeing. Most divorce tools ignore this. This one doesn't. See how mediation compares on both fronts.</p>
-  </div>
-
-  <!-- Floating input panel (appears after first calculate, desktop only) -->
-  <div class="rlm-calc__float-panel" id="rlm-float-panel">
-    <div class="rlm-calc__float-title">Your scenario</div>
+<!-- Floating input panel (positioned outside calculator container) -->
+<div class="rlm-calc__float-panel" id="rlm-float-panel">
+  <div class="rlm-calc__float-title">Your scenario</div>
     <div class="rlm-calc__float-field">
       <div class="rlm-calc__float-label">Children</div>
       <div class="rlm-calc__float-toggles">
@@ -1082,8 +1072,19 @@
       </select>
     </div>
     <div class="rlm-calc__float-divider"></div>
+    <div class="rlm-calc__float-updated" id="rlm-fp-updated">✓ Results updated</div>
+    <button class="rlm-calc__float-nav" id="rlm-fp-nav" onclick="rlmFloatNav()">See cost comparison ↓</button>
     <a href="https://www.rodriguezlawandmediation.com/contact" class="rlm-calc__float-cta">Schedule a Consultation</a>
     <div class="rlm-calc__float-spanish">Mediación en español</div>
+  </div>
+
+<div class="rlm-calc" id="rlm-cost-calculator">
+
+  <!-- Header -->
+  <div class="rlm-calc__header">
+    <div class="rlm-calc__badge">NYC Divorce Comparison Tool</div>
+    <h2 class="rlm-calc__title">Divorce Cost & Impact Calculator</h2>
+    <p class="rlm-calc__subtitle">Litigation doesn't just drain your finances — it takes a measurable toll on your mental health and your children's wellbeing. Most divorce tools ignore this. This one doesn't. See how mediation compares on both fronts.</p>
   </div>
 
   <!-- Form -->
@@ -1717,9 +1718,8 @@
 
     if (isFirstCalc) {
       resultsEl.classList.add('rlm-calc__results--visible');
-      // Show floating panel immediately
-      document.getElementById('rlm-float-panel').classList.add('rlm-calc__float-panel--visible');
-      // Scroll parent to results (if parent script is listening)
+      calculatedOnce = true;
+      // Scroll parent to results
       var resultsOffset = document.getElementById('rlm-section-costs').offsetTop - 20;
       window.parent.postMessage({ type: 'rlm-calc-scroll', offset: resultsOffset }, '*');
       rlmEnableAutoRecalc();
@@ -1729,6 +1729,65 @@
     }
     setTimeout(rlmPostHeight, 300);
   };
+
+  var calculatedOnce = false;
+
+  // ── Parent scroll listener ──
+  var parentScrollOffset = 0;
+  var parentViewportHeight = 800;
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'rlm-parent-scroll') {
+      parentScrollOffset = e.data.iframeTopOffset;
+      if (e.data.viewportHeight) parentViewportHeight = e.data.viewportHeight;
+      updateFloatPanel();
+    }
+  });
+
+  // ── Float panel positioning ──
+  function updateFloatPanel() {
+    if (!calculatedOnce) return;
+    var panel = document.getElementById('rlm-float-panel');
+    var formEl = document.getElementById('rlm-form-section');
+    if (!formEl || !panel) return;
+
+    var formBottom = formEl.offsetTop + formEl.offsetHeight;
+    var formVisibleBottom = formBottom + parentScrollOffset;
+
+    if (formVisibleBottom < 100) {
+      panel.classList.add('rlm-calc__float-panel--visible');
+
+      var isMobile = window.innerWidth <= 960;
+      var panelHeight = panel.offsetHeight || 400;
+
+      if (isMobile) {
+        var bottomPos = -parentScrollOffset + parentViewportHeight - panelHeight;
+        panel.style.top = bottomPos + 'px';
+      } else {
+        var viewportCenter = -parentScrollOffset + (parentViewportHeight / 2);
+        var panelTop = viewportCenter - (panelHeight / 2);
+        var contentHeight = document.getElementById('rlm-cost-calculator').scrollHeight;
+        panelTop = Math.max(200, Math.min(contentHeight - panelHeight - 40, panelTop));
+        panel.style.top = panelTop + 'px';
+      }
+    } else {
+      panel.classList.remove('rlm-calc__float-panel--visible');
+    }
+
+    // Update nav button text
+    var navBtn = document.getElementById('rlm-fp-nav');
+    if (!navBtn) return;
+    var wellbeingEl = document.getElementById('rlm-section-wellbeing');
+    if (wellbeingEl) {
+      var wellbeingTop = wellbeingEl.offsetTop + parentScrollOffset;
+      if (wellbeingTop > 200) {
+        navBtn.textContent = 'See family impact ↓';
+        navBtn.setAttribute('data-target', 'rlm-section-wellbeing');
+      } else {
+        navBtn.textContent = 'See cost comparison ↑';
+        navBtn.setAttribute('data-target', 'rlm-section-costs');
+      }
+    }
+  }
 
   // ── Float panel navigation ──
   window.rlmFloatNav = function() {
