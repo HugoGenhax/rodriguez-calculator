@@ -1582,8 +1582,8 @@
     document.getElementById('rlm-includes-list').innerHTML = includesHTML;
 
     // ── Wellbeing impact section ──
-    // Fixed at "moderate" contentiousness (some disagreements assumed)
-    var contentious = 'moderate';
+    // Wellbeing contentiousness driven by case complexity
+    var contentious = { simple: 'low', moderate: 'moderate', complex: 'high' }[complexity];
 
     // Risk data: [label, litigationLevel, litigationWidth, mediationLevel, mediationWidth]
     // Levels: vlow, low, med, high
