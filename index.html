@@ -48,7 +48,7 @@
   /* ── Header (ultra-compact) ── */
   .rlm-calc__header {
     text-align: center;
-    padding: 4px 20px 8px;
+    padding: 12px 20px 12px;
     position: relative;
   }
   .rlm-calc__header::after {
@@ -57,7 +57,7 @@
     width: 40px;
     height: 2px;
     background: var(--gold);
-    margin: 8px auto 0;
+    margin: 10px auto 0;
   }
   .rlm-calc__badge {
     display: inline-block;
@@ -88,7 +88,7 @@
     line-height: 1.55;
   }
 
-  /* ── Floating input panel (desktop only, after first calculate) ── */
+  /* ── Floating input panel ── */
   .rlm-calc__float-panel {
     display: none;
     position: fixed;
@@ -102,10 +102,11 @@
     padding: 20px 18px;
     box-shadow: 0 8px 32px rgba(43,76,126,0.12);
     z-index: 100;
-    animation: rlm-slideIn 0.3s ease;
+    transition: opacity 0.25s, transform 0.25s;
   }
   .rlm-calc__float-panel--visible {
     display: block;
+    animation: rlm-slideIn 0.3s ease;
   }
   @keyframes rlm-slideIn {
     from { opacity: 0; transform: translateY(-50%) translateX(20px); }
@@ -172,7 +173,38 @@
   .rlm-calc__float-divider {
     height: 1px;
     background: var(--border);
-    margin: 14px 0;
+    margin: 12px 0;
+  }
+  .rlm-calc__float-nav {
+    display: block;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    background: var(--sand);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s;
+    margin-bottom: 8px;
+  }
+  .rlm-calc__float-nav:hover {
+    background: var(--gold-light);
+  }
+  .rlm-calc__float-updated {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sage);
+    text-align: center;
+    padding: 4px 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .rlm-calc__float-updated--show {
+    opacity: 1;
   }
   .rlm-calc__float-cta {
     display: block;
@@ -204,8 +236,36 @@
   @media (max-width: 1200px) {
     .rlm-calc__float-panel { right: 8px; width: 220px; padding: 16px 14px; }
   }
+  /* Mobile: full-width footer bar */
   @media (max-width: 960px) {
-    .rlm-calc__float-panel { display: none !important; }
+    .rlm-calc__float-panel {
+      right: 0;
+      left: 0;
+      bottom: 0;
+      top: auto;
+      transform: none;
+      width: 100%;
+      border-radius: 16px 16px 0 0;
+      padding: 14px 20px;
+      box-shadow: 0 -4px 20px rgba(43,76,126,0.15);
+    }
+    .rlm-calc__float-panel--visible {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    @keyframes rlm-slideIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .rlm-calc__float-title { display: none; }
+    .rlm-calc__float-field { margin-bottom: 0; flex: 1; min-width: 80px; }
+    .rlm-calc__float-divider { display: none; }
+    .rlm-calc__float-nav { flex: 0 0 auto; margin-bottom: 0; padding: 9px 16px; }
+    .rlm-calc__float-cta { flex: 0 0 auto; width: auto; padding: 9px 16px; }
+    .rlm-calc__float-spanish { display: none; }
+    .rlm-calc__float-updated { display: none; }
   }
 
   /* ── Form Section ── */
@@ -219,12 +279,9 @@
   }
   .rlm-calc__form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 14px;
     align-items: end;
-  }
-  .rlm-calc__field--full {
-    grid-column: 1 / -1;
   }
   @media (max-width: 700px) {
     .rlm-calc__form-grid { grid-template-columns: 1fr; }
@@ -1069,6 +1126,8 @@
       </select>
     </div>
     <div class="rlm-calc__float-divider"></div>
+    <div class="rlm-calc__float-updated" id="rlm-fp-updated">✓ Results updated</div>
+    <button class="rlm-calc__float-nav" id="rlm-fp-nav" onclick="rlmFloatNav()">See cost comparison ↓</button>
     <a href="https://www.rodriguezlawandmediation.com/contact" class="rlm-calc__float-cta">Schedule a Consultation</a>
     <div class="rlm-calc__float-spanish">Mediación en español</div>
   </div>
@@ -1078,7 +1137,7 @@
     <div class="rlm-calc__form-grid">
 
       <!-- Children -->
-      <div class="rlm-calc__field rlm-calc__field--full">
+      <div class="rlm-calc__field">
         <label class="rlm-calc__label">Are children involved?</label>
         <div class="rlm-calc__toggle-group">
           <button type="button" class="rlm-calc__toggle rlm-calc__toggle--active" data-field="children" data-value="no" onclick="rlmSetToggle(this)">No Children</button>
@@ -1124,7 +1183,7 @@
   <div class="rlm-calc__results" id="rlm-results">
 
     <!-- Savings Banner -->
-    <div class="rlm-calc__savings">
+    <div class="rlm-calc__savings" id="rlm-section-costs">
       <div class="rlm-calc__savings-label">Estimated savings with mediation</div>
       <div class="rlm-calc__savings-amount" id="rlm-savings-amount">$0</div>
       <div class="rlm-calc__savings-note" id="rlm-savings-note">Based on your inputs</div>
@@ -1223,7 +1282,7 @@
     </div>
 
     <!-- ═══ WELLBEING IMPACT SECTION ═══ -->
-    <div class="rlm-calc__wellbeing">
+    <div class="rlm-calc__wellbeing" id="rlm-section-wellbeing">
 
       <div class="rlm-calc__wellbeing-header">
         <div class="rlm-calc__wellbeing-badge">Research-Based Comparison</div>
@@ -1711,22 +1770,81 @@
       resultsEl.style.animation = 'none';
       resultsEl.offsetHeight;
       resultsEl.style.animation = '';
-      // Show floating panel (desktop only via CSS)
-      document.getElementById('rlm-float-panel').classList.add('rlm-calc__float-panel--visible');
-      // Enable auto-recalculate on main form changes
+      calculatedOnce = true;
+      // Scroll parent page to results
+      var resultsOffset = document.getElementById('rlm-section-costs').offsetTop - 20;
+      window.parent.postMessage({ type: 'rlm-calc-scroll', offset: resultsOffset }, '*');
+      // Enable auto-recalculate
       rlmEnableAutoRecalc();
     } else {
       rlmFlashProgress();
+      // Flash "Updated" in float panel
+      rlmFlashUpdated();
+    }
+
+    // Post height to parent
+    setTimeout(rlmPostHeight, 300);
+  };
+
+  var calculatedOnce = false;
+
+  // ── Float panel: scroll-based show/hide ──
+  var parentScrollOffset = 0;
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'rlm-parent-scroll') {
+      parentScrollOffset = e.data.iframeTopOffset;
+      updateFloatPanel();
+    }
+  });
+
+  function updateFloatPanel() {
+    if (!calculatedOnce) return;
+    var panel = document.getElementById('rlm-float-panel');
+    var formEl = document.getElementById('rlm-form-section');
+    if (!formEl || !panel) return;
+
+    // Form bottom position relative to parent viewport
+    var formBottom = formEl.offsetTop + formEl.offsetHeight;
+    var formVisibleBottom = formBottom + parentScrollOffset;
+
+    // Show panel when form scrolls out of view
+    if (formVisibleBottom < -20) {
+      panel.classList.add('rlm-calc__float-panel--visible');
+    } else {
+      panel.classList.remove('rlm-calc__float-panel--visible');
+    }
+
+    // Update nav button text based on which section is near viewport
+    var navBtn = document.getElementById('rlm-fp-nav');
+    if (!navBtn) return;
+    var wellbeingEl = document.getElementById('rlm-section-wellbeing');
+    if (wellbeingEl) {
+      var wellbeingTop = wellbeingEl.offsetTop + parentScrollOffset;
+      if (wellbeingTop > 200) {
+        navBtn.textContent = 'See family impact ↓';
+        navBtn.setAttribute('data-target', 'rlm-section-wellbeing');
+      } else {
+        navBtn.textContent = 'See cost comparison ↑';
+        navBtn.setAttribute('data-target', 'rlm-section-costs');
+      }
+    }
+  }
+
+  // ── Float panel: navigation button ──
+  window.rlmFloatNav = function() {
+    var target = document.getElementById('rlm-fp-nav').getAttribute('data-target') || 'rlm-section-costs';
+    var el = document.getElementById(target);
+    if (el) {
+      var offset = el.offsetTop - 20;
+      window.parent.postMessage({ type: 'rlm-calc-scroll', offset: offset }, '*');
     }
   };
 
-  // ── Floating panel sync ──
+  // ── Float panel: sync inputs ──
   window.rlmFloatToggle = function(val) {
     state.children = val;
-    // Sync floating panel toggles
     document.getElementById('rlm-fp-no-kids').classList.toggle('rlm-calc__float-tog--active', val === 'no');
     document.getElementById('rlm-fp-yes-kids').classList.toggle('rlm-calc__float-tog--active', val === 'yes');
-    // Sync main form toggles
     var mainToggles = document.querySelectorAll('.rlm-calc__toggle[data-field="children"]');
     mainToggles.forEach(function(btn) {
       btn.classList.toggle('rlm-calc__toggle--active', btn.getAttribute('data-value') === val);
@@ -1735,13 +1853,11 @@
   };
 
   window.rlmFloatSync = function() {
-    // Sync floating panel values to main form
     document.getElementById('rlm-complexity').value = document.getElementById('rlm-fp-complexity').value;
     document.getElementById('rlm-assets').value = document.getElementById('rlm-fp-assets').value;
     window.rlmCalculate();
   };
 
-  // Sync main form changes to floating panel
   function rlmSyncToFloat() {
     var fpComp = document.getElementById('rlm-fp-complexity');
     var fpAssets = document.getElementById('rlm-fp-assets');
@@ -1749,6 +1865,14 @@
     if (fpAssets) fpAssets.value = document.getElementById('rlm-assets').value;
     document.getElementById('rlm-fp-no-kids').classList.toggle('rlm-calc__float-tog--active', state.children === 'no');
     document.getElementById('rlm-fp-yes-kids').classList.toggle('rlm-calc__float-tog--active', state.children === 'yes');
+  }
+
+  // ── Flash "Updated" in float panel ──
+  function rlmFlashUpdated() {
+    var el = document.getElementById('rlm-fp-updated');
+    if (!el) return;
+    el.classList.add('rlm-calc__float-updated--show');
+    setTimeout(function() { el.classList.remove('rlm-calc__float-updated--show'); }, 1500);
   }
 
   // ── Progress bar flash ──
@@ -1770,41 +1894,28 @@
     });
   }
 
-  // ── Auto-recalculate on input changes ──
+  // ── Auto-recalculate on main form changes ──
   var autoRecalcEnabled = false;
   function rlmEnableAutoRecalc() {
     if (autoRecalcEnabled) return;
     autoRecalcEnabled = true;
-    var inputs = [
-      document.getElementById('rlm-complexity'),
-      document.getElementById('rlm-assets')
-    ];
-    inputs.forEach(function(el) {
-      if (el) el.addEventListener('change', function() {
-        rlmSyncToFloat();
-        window.rlmCalculate();
-      });
+    ['rlm-complexity', 'rlm-assets'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('change', function() { rlmSyncToFloat(); window.rlmCalculate(); });
     });
-    var toggles = document.querySelectorAll('.rlm-calc__toggle[data-field="children"]');
-    toggles.forEach(function(btn) {
+    document.querySelectorAll('.rlm-calc__toggle[data-field="children"]').forEach(function(btn) {
       btn.addEventListener('click', function() {
         setTimeout(function() { rlmSyncToFloat(); window.rlmCalculate(); }, 50);
       });
     });
   }
 
-  // ── Iframe height (post generous initial height, suppress scroll) ──
+  // ── Iframe height communication ──
   function rlmPostHeight() {
     var height = document.getElementById('rlm-cost-calculator').scrollHeight + 40;
     window.parent.postMessage({ type: 'rlm-calc-resize', height: height }, '*');
   }
-  // Post a large initial height so iframe doesn't need to grow on first calculate
-  window.addEventListener('load', function() {
-    setTimeout(function() {
-      var h = Math.max(document.getElementById('rlm-cost-calculator').scrollHeight + 40, 4500);
-      window.parent.postMessage({ type: 'rlm-calc-resize', height: h }, '*');
-    }, 300);
-  });
+  window.addEventListener('load', function() { setTimeout(rlmPostHeight, 500); });
   window.addEventListener('resize', rlmPostHeight);
 
   var _origCalc = window.rlmCalculate;
