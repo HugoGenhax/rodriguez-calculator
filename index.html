@@ -1060,14 +1060,14 @@
       <div class="rlm-calc__float-label">Assets</div>
       <select class="rlm-calc__float-select" id="rlm-fp-assets" onchange="rlmFloatSync()">
         <option value="low">Under $500K</option>
-        <option value="mid" selected>$500K\u2013$2M</option>
-        <option value="high">$2M\u2013$5M</option>
+        <option value="mid" selected>$500K–$2M</option>
+        <option value="high">$2M–$5M</option>
         <option value="vhigh">Over $5M</option>
       </select>
     </div>
     <div class="rlm-calc__float-divider"></div>
     <a href="https://www.rodriguezlawandmediation.com/contact" class="rlm-calc__float-cta">Schedule a Consultation</a>
-    <div class="rlm-calc__float-spanish">Mediaci\u00F3n en espa\u00F1ol</div>
+    <div class="rlm-calc__float-spanish">Mediación en español</div>
   </div>
 
   <!-- Form -->
@@ -1087,9 +1087,9 @@
       <div class="rlm-calc__field">
         <label class="rlm-calc__label">Case complexity</label>
         <select class="rlm-calc__select" id="rlm-complexity">
-          <option value="simple">Simple \u2014 Few shared assets</option>
-          <option value="moderate" selected>Moderate \u2014 Home, savings, retirement</option>
-          <option value="complex">Complex \u2014 Multiple properties, business</option>
+          <option value="simple">Simple — Few shared assets</option>
+          <option value="moderate" selected>Moderate — Home, savings, retirement</option>
+          <option value="complex">Complex — Multiple properties, business</option>
         </select>
       </div>
 
@@ -1098,8 +1098,8 @@
         <label class="rlm-calc__label">Combined marital assets <span class="rlm-calc__label-hint">(approximate)</span></label>
         <select class="rlm-calc__select" id="rlm-assets">
           <option value="low">Under $500,000</option>
-          <option value="mid" selected>$500,000 \u2013 $2,000,000</option>
-          <option value="high">$2,000,000 \u2013 $5,000,000</option>
+          <option value="mid" selected>$500,000 – $2,000,000</option>
+          <option value="high">$2,000,000 – $5,000,000</option>
           <option value="vhigh">Over $5,000,000</option>
         </select>
       </div>
@@ -1477,7 +1477,7 @@
     var litLow = Math.round(litTotal * 0.8);
     var litHigh = Math.round(litTotal * 1.2);
 
-    var litMonths = { simple: '6\u201310', moderate: '8\u201314', complex: '12\u201324' }[complexity];
+    var litMonths = { simple: '6–10', moderate: '8–14', complex: '12–24' }[complexity];
 
     // ── Mediation estimates (fixed pricing by asset tier + complexity) ──
     var medTotal, sessions, draftHours, commsText, medTimeline;
@@ -1487,12 +1487,12 @@
       medTotal = { low: 7500, mid: 8500, high: 9500, vhigh: 10500 }[assets];
       sessions = 7;
       draftHours = 8;
-      medTimeline = '2\u20134 months';
+      medTimeline = '2–4 months';
     } else {
       medTotal = { low: 5500, mid: 6500, high: 7500, vhigh: 8500 }[assets];
       sessions = 5;
       draftHours = 6;
-      medTimeline = '6\u201312 weeks';
+      medTimeline = '6–12 weeks';
     }
 
     // Complexity adds sessions: Moderate +1, Complex +2 (at $750/session)
@@ -1531,7 +1531,7 @@
 
     // Mediation card (fixed price, no range)
     document.getElementById('rlm-med-total').textContent = fmt(medTotal);
-    document.getElementById('rlm-med-sessions').textContent = sessions + ' \u00D7 90-minute sessions';
+    document.getElementById('rlm-med-sessions').textContent = sessions + ' × 90-minute sessions';
     document.getElementById('rlm-med-summaries').textContent = 'Included';
     document.getElementById('rlm-med-agreement').textContent = 'Included (' + draftHours + ' hrs)';
     document.getElementById('rlm-med-comms').textContent = commsText;
