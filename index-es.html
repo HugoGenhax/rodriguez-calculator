@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Costos e Impacto del Divorcio — Rodriguez Law and Mediation</title>
+<meta name="description" content="Compare the cost and family wellbeing impact of divorce mediation vs. traditional litigation in New York City. See what litigation really costs — financially and emotionally. Free calculator from Rodriguez Law and Mediation, Upper West Side, Manhattan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  html, body {
+    background: transparent;
+    overflow-x: hidden;
+  }
+
+  :root {
+    --navy: #2B4C7E;
+    --navy-dark: #1E3A5F;
+    --navy-light: #3D6298;
+    --cream: #FDFAF6;
+    --sand: #F5F0E8;
+    --gold: #C9A96E;
+    --gold-light: #E8D5B0;
+    --sage: #7A9E7E;
+    --sage-light: #E8F0E9;
+    --coral: #D4775C;
+    --coral-light: #FBEEE9;
+    --text: #2D3436;
+    --text-light: #636E72;
+    --white: #FFFFFF;
+    --border: #E2DDD5;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  .rlm-calc {
+    font-family: var(--font-body);
+    color: var(--text);
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 20px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header (ultra-compact) ── */
+  .rlm-calc__header {
+    text-align: center;
+    padding: 4px 20px 8px;
+    position: relative;
+  }
+  .rlm-calc__header::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+    margin: 10px auto 0;
+  }
+  .rlm-calc__badge {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--navy);
+    background: var(--sand);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .rlm-calc__title {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 600;
+    color: var(--navy-dark);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .rlm-calc__subtitle {
+    font-size: 13px;
+    color: var(--text-light);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  /* ── Floating input panel ── */
+  .rlm-calc__float-panel {
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 0;
+    width: 220px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 18px;
+    box-shadow: 0 8px 32px rgba(43,76,126,0.12);
+    z-index: 100;
+  }
+  .rlm-calc__float-panel--visible {
+    display: block;
+  }
+  .rlm-calc__float-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 14px;
+  }
+  .rlm-calc__float-field {
+    margin-bottom: 12px;
+  }
+  .rlm-calc__float-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+  .rlm-calc__float-select {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text);
+    width: 100%;
+    padding: 8px 28px 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--cream);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%232B4C7E' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+  }
+  .rlm-calc__float-toggles {
+    display: flex;
+    gap: 4px;
+  }
+  .rlm-calc__float-tog {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 7px 4px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--cream);
+    color: var(--text-light);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .rlm-calc__float-tog--active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .rlm-calc__float-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 14px 0;
+  }
+  .rlm-calc__float-cta {
+    display: block;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--navy);
+    border: none;
+    border-radius: 10px;
+    padding: 11px 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .rlm-calc__float-cta:hover {
+    background: var(--navy-dark);
+    color: var(--white);
+  }
+  .rlm-calc__float-spanish {
+    font-size: 10px;
+    color: var(--text-light);
+    text-align: center;
+    margin-top: 8px;
+    font-style: italic;
+  }
+  @media (max-width: 1200px) {
+    .rlm-calc__float-panel { width: 200px; padding: 16px 14px; }
+  }
+  @media (max-width: 960px) {
+    .rlm-calc__float-panel {
+      right: 0;
+      left: 0;
+      width: 100%;
+      border-radius: 16px 16px 0 0;
+      padding: 14px 20px;
+      box-shadow: 0 -4px 20px rgba(43,76,126,0.15);
+    }
+    .rlm-calc__float-panel--visible {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .rlm-calc__float-title { display: none; }
+    .rlm-calc__float-field { margin-bottom: 0; flex: 1; min-width: 80px; }
+    .rlm-calc__float-divider { display: none; }
+    .rlm-calc__float-nav { flex: 0 0 auto; margin-bottom: 0; padding: 9px 16px; }
+    .rlm-calc__float-cta { flex: 0 0 auto; width: auto; padding: 9px 16px; }
+    .rlm-calc__float-spanish { display: none; }
+    .rlm-calc__float-updated { display: none; }
+  }
+
+  /* ── Form Section ── */
+  .rlm-calc__form {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(43,76,126,0.04);
+  }
+  .rlm-calc__form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: end;
+  }
+  @media (max-width: 700px) {
+    .rlm-calc__form-grid { grid-template-columns: 1fr; }
+    .rlm-calc__form { padding: 20px 16px; }
+  }
+  .rlm-calc__field {
+    display: flex;
+    flex-direction: column;
+  }
+  .rlm-calc__field--full {
+    grid-column: 1 / -1;
+  }
+  .rlm-calc__label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .rlm-calc__label-hint {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-light);
+    font-size: 12px;
+  }
+  .rlm-calc__select,
+  .rlm-calc__input {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text);
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--cream);
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .rlm-calc__select {
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%232B4C7E' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+  .rlm-calc__select:focus,
+  .rlm-calc__input:focus {
+    outline: none;
+    border-color: var(--navy-light);
+    box-shadow: 0 0 0 3px rgba(43,76,126,0.1);
+  }
+
+  /* Toggle buttons for Hijos */
+  .rlm-calc__toggle-group {
+    display: flex;
+    gap: 10px;
+  }
+  .rlm-calc__toggle {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--cream);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .rlm-calc__toggle:hover {
+    border-color: var(--navy-light);
+    color: var(--navy);
+  }
+  .rlm-calc__toggle--active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .rlm-calc__toggle--active:hover {
+    background: var(--navy-dark);
+    border-color: var(--navy-dark);
+    color: var(--white);
+  }
+
+  /* ── CTA Button ── */
+  .rlm-calc__btn {
+    display: block;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    background: var(--navy);
+    border: none;
+    border-radius: 12px;
+    padding: 16px 24px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+  .rlm-calc__btn:hover {
+    background: var(--navy-dark);
+  }
+  .rlm-calc__btn:active {
+    transform: scale(0.99);
+  }
+
+  /* ── Results ── */
+  .rlm-calc__results {
+    display: none;
+    animation: rlm-fadeUp 0.5s ease;
+  }
+  .rlm-calc__results--visible {
+    display: block;
+  }
+  @keyframes rlm-fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Savings banner */
+  .rlm-calc__savings {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .rlm-calc__savings::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(201,169,110,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .rlm-calc__savings-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .rlm-calc__savings-amount {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 52px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    position: relative;
+  }
+  .rlm-calc__savings-note {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 8px;
+    position: relative;
+  }
+
+  /* Comparison cards */
+  .rlm-calc__comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 600px) {
+    .rlm-calc__comparison { grid-template-columns: 1fr; }
+  }
+  .rlm-calc__card {
+    border-radius: 16px;
+    padding: 28px 24px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .rlm-calc__card--litigation {
+    background: var(--coral-light);
+    border-color: #E8CBBF;
+  }
+  .rlm-calc__card--mediation {
+    background: var(--sage-light);
+    border-color: #C4D9C6;
+  }
+  .rlm-calc__card-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  .rlm-calc__card--litigation .rlm-calc__card-badge {
+    background: rgba(212,119,92,0.15);
+    color: var(--coral);
+  }
+  .rlm-calc__card--mediation .rlm-calc__card-badge {
+    background: rgba(122,158,126,0.2);
+    color: #5A835E;
+  }
+  .rlm-calc__card-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 16px;
+  }
+  .rlm-calc__card-price {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 5vw, 38px);
+    font-weight: 700;
+    color: var(--navy-dark);
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+  .rlm-calc__card-price-note {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+  }
+  .rlm-calc__card-detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .rlm-calc__card-detail:last-child {
+    border-bottom: none;
+  }
+  .rlm-calc__card-detail-label {
+    color: var(--text-light);
+  }
+  .rlm-calc__card-detail-value {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Breakdown section */
+  .rlm-calc__breakdown {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+  }
+  .rlm-calc__breakdown-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 20px;
+  }
+  .rlm-calc__bar-row {
+    margin-bottom: 20px;
+  }
+  .rlm-calc__bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .rlm-calc__bar-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .rlm-calc__bar-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy-dark);
+  }
+  .rlm-calc__bar-track {
+    height: 10px;
+    background: var(--sand);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .rlm-calc__bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0%;
+  }
+  .rlm-calc__bar-fill--litigation {
+    background: linear-gradient(90deg, var(--coral), #C0654B);
+  }
+  .rlm-calc__bar-fill--mediation {
+    background: linear-gradient(90deg, var(--sage), #5A835E);
+  }
+
+  /* Mediation includes */
+  .rlm-calc__includes {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+  }
+  .rlm-calc__includes-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 16px;
+  }
+  .rlm-calc__includes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 600px) {
+    .rlm-calc__includes-grid { grid-template-columns: 1fr; }
+  }
+  .rlm-calc__includes-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .rlm-calc__check {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--sage);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .rlm-calc__check svg {
+    width: 11px;
+    height: 11px;
+    stroke: white;
+    stroke-width: 2.5;
+    fill: none;
+  }
+
+  /* CTA box */
+  .rlm-calc__cta-box {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 36px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .rlm-calc__cta-box::before {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .rlm-calc__cta-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .rlm-calc__cta-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 20px;
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  .rlm-calc__cta-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy-dark);
+    background: var(--gold-light);
+    padding: 14px 36px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.1s;
+    position: relative;
+  }
+  .rlm-calc__cta-link:hover {
+    background: var(--gold);
+    color: var(--white);
+  }
+  .rlm-calc__cta-spanish {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 14px;
+    font-style: italic;
+    position: relative;
+  }
+
+  /* ── Progress bar for recalculation ── */
+  .rlm-calc__progress {
+    height: 3px;
+    background: var(--sand);
+    border-radius: 2px;
+    margin: -8px 0 16px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .rlm-calc__progress--active {
+    opacity: 1;
+  }
+  .rlm-calc__progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--navy-light), var(--gold));
+    border-radius: 2px;
+    transition: width 0.45s ease-out;
+  }
+  .rlm-calc__progress--active .rlm-calc__progress-bar {
+    width: 100%;
+  }
+
+  /* ── Wellbeing Impact Section ── */
+  .rlm-calc__wellbeing {
+    margin-bottom: 24px;
+  }
+  .rlm-calc__wellbeing-header {
+    text-align: center;
+    padding: 32px 24px 28px;
+    position: relative;
+  }
+  .rlm-calc__wellbeing-header::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+    margin: 0 auto 24px;
+  }
+  .rlm-calc__wellbeing-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--navy);
+    background: var(--sand);
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .rlm-calc__wellbeing-title {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3.5vw, 30px);
+    font-weight: 600;
+    color: var(--navy-dark);
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .rlm-calc__wellbeing-subtitle {
+    font-size: 14px;
+    color: var(--text-light);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  /* Risk rows */
+  .rlm-calc__risk-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+  }
+  .rlm-calc__risk-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 18px;
+  }
+  .rlm-calc__risk-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .rlm-calc__risk-row:last-child {
+    border-bottom: none;
+  }
+  @media (max-width: 600px) {
+    .rlm-calc__risk-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 12px 0;
+    }
+  }
+  .rlm-calc__risk-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .rlm-calc__risk-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .rlm-calc__risk-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: var(--sand);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .rlm-calc__risk-bar-inner {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0%;
+  }
+  .rlm-calc__risk-bar-inner--high {
+    background: linear-gradient(90deg, #E88A6F, var(--coral));
+  }
+  .rlm-calc__risk-bar-inner--med {
+    background: linear-gradient(90deg, #E8C56F, #D4A74C);
+  }
+  .rlm-calc__risk-bar-inner--low {
+    background: linear-gradient(90deg, #8DB891, var(--sage));
+  }
+  .rlm-calc__risk-bar-inner--vlow {
+    background: linear-gradient(90deg, #A8D5AB, #7ABF7F);
+  }
+  .rlm-calc__risk-level {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    min-width: 50px;
+  }
+  .rlm-calc__risk-level--high { color: var(--coral); }
+  .rlm-calc__risk-level--med { color: #B8922E; }
+  .rlm-calc__risk-level--low { color: var(--sage); }
+  .rlm-calc__risk-level--vlow { color: #5A9E5F; }
+  @media (max-width: 600px) {
+    .rlm-calc__risk-bar-container {
+      padding-left: 0;
+    }
+    .rlm-calc__risk-label::after {
+      content: ':';
+    }
+  }
+
+  /* Stat callout */
+  .rlm-calc__stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) {
+    .rlm-calc__stat-grid { grid-template-columns: 1fr; }
+  }
+  .rlm-calc__stat-card {
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .rlm-calc__stat-card--lit {
+    background: var(--coral-light);
+    border: 1px solid #E8CBBF;
+  }
+  .rlm-calc__stat-card--med {
+    background: var(--sage-light);
+    border: 1px solid #C4D9C6;
+  }
+  .rlm-calc__stat-number {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .rlm-calc__stat-card--lit .rlm-calc__stat-number { color: var(--coral); }
+  .rlm-calc__stat-card--med .rlm-calc__stat-number { color: #5A835E; }
+  .rlm-calc__stat-desc {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  .rlm-calc__research-note {
+    font-size: 12px;
+    color: var(--text-light);
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 14px 18px;
+    line-height: 1.7;
+    border-left: 3px solid var(--navy-light);
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+  .rlm-calc__research-note a {
+    color: var(--navy-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--border);
+  }
+
+  /* ── Methodology accordion ── */
+  .rlm-calc__methodology {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    background: var(--white);
+  }
+  .rlm-calc__meth-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    background: var(--white);
+    border: none;
+    padding: 18px 24px;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-align: left;
+  }
+  .rlm-calc__meth-toggle:hover {
+    background: var(--cream);
+  }
+  .rlm-calc__meth-toggle-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+  .rlm-calc__meth-toggle[aria-expanded="true"] .rlm-calc__meth-toggle-icon {
+    transform: rotate(180deg);
+  }
+  .rlm-calc__meth-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .rlm-calc__meth-body--open {
+    max-height: 8000px;
+  }
+  .rlm-calc__meth-content {
+    padding: 0 24px 28px;
+    border-top: 1px solid var(--border);
+  }
+  .rlm-calc__meth-section {
+    padding-top: 22px;
+  }
+  .rlm-calc__meth-section + .rlm-calc__meth-section {
+    border-top: 1px solid var(--sand);
+    margin-top: 20px;
+  }
+  .rlm-calc__meth-h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 10px;
+  }
+  .rlm-calc__meth-h4 {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 14px 0 6px;
+  }
+  .rlm-calc__meth-p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 8px;
+  }
+  .rlm-calc__meth-p a {
+    color: var(--navy-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--border);
+    transition: text-decoration-color 0.15s;
+  }
+  .rlm-calc__meth-p a:hover {
+    text-decoration-color: var(--navy-light);
+  }
+  .rlm-calc__meth-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  .rlm-calc__meth-table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--navy);
+    padding: 8px 12px;
+    background: var(--sand);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .rlm-calc__meth-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .rlm-calc__meth-table tr:last-child td {
+    border-bottom: none;
+  }
+  .rlm-calc__meth-source-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+  }
+  .rlm-calc__meth-source-list li {
+    font-size: 13px;
+    color: var(--text-light);
+    padding: 5px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .rlm-calc__meth-source-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .rlm-calc__meth-source-list li a {
+    color: var(--navy-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--border);
+  }
+  .rlm-calc__meth-note {
+    font-size: 12px;
+    color: var(--text-light);
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    line-height: 1.7;
+    border-left: 3px solid var(--gold);
+  }
+
+  /* Disclaimer */
+  .rlm-calc__disclaimer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-light);
+    padding: 20px;
+    line-height: 1.7;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .rlm-calc__disclaimer a {
+    color: var(--navy-light);
+    text-decoration: none;
+  }
+
+  /* Source footnote */
+  .rlm-calc__sources {
+    font-size: 11px;
+    color: var(--text-light);
+    text-align: center;
+    padding: 0 20px 8px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating input panel (appears after first calculate, desktop only) -->
+  <div class="rlm-calc__float-panel" id="rlm-float-panel">
+    <div class="rlm-calc__float-title">Tu escenario</div>
+    <div class="rlm-calc__float-field">
+      <div class="rlm-calc__float-label">Hijos</div>
+      <div class="rlm-calc__float-toggles">
+        <button class="rlm-calc__float-tog rlm-calc__float-tog--active" id="rlm-fp-no-kids" onclick="rlmFloatToggle('no')">No</button>
+        <button class="rlm-calc__float-tog" id="rlm-fp-yes-kids" onclick="rlmFloatToggle('yes')">Sí</button>
+      </div>
+    </div>
+    <div class="rlm-calc__float-field">
+      <div class="rlm-calc__float-label">Complejidad</div>
+      <select class="rlm-calc__float-select" id="rlm-fp-complexity" onchange="rlmFloatSync()">
+        <option value="simple">Simple</option>
+        <option value="moderate" selected>Moderado</option>
+        <option value="complex">Complejo</option>
+      </select>
+    </div>
+    <div class="rlm-calc__float-field">
+      <div class="rlm-calc__float-label">Bienes</div>
+      <select class="rlm-calc__float-select" id="rlm-fp-assets" onchange="rlmFloatSync()">
+        <option value="low">Menos de $500K</option>
+        <option value="mid" selected>$500K–$2M</option>
+        <option value="high">$2M–$5M</option>
+        <option value="vhigh">Más de $5M</option>
+      </select>
+    </div>
+    <div class="rlm-calc__float-divider"></div>
+    <a href="https://www.rodriguezlawandmediation.com/contact" class="rlm-calc__float-cta">Agenda una Consulta</a>
+    <div class="rlm-calc__float-spanish">Mediación en español</div>
+  </div>
+
+<div class="rlm-calc" id="rlm-cost-calculator">
+
+  <!-- Header -->
+  <div class="rlm-calc__header">
+    <div class="rlm-calc__badge">Herramienta de Comparación de Divorcio NYC</div>
+    <h2 class="rlm-calc__title">Calculadora de Costos e Impacto del Divorcio</h2>
+    <p class="rlm-calc__subtitle">El litigio no solo agota tus finanzas — tiene un impacto medible en tu salud mental y el bienestar de tus hijos. La mayoría de las herramientas de divorcio ignoran esto. Esta no. Mira cómo se compara la mediación en ambos frentes.</p>
+  </div>
+
+  <!-- Form -->
+  <div class="rlm-calc__form" id="rlm-form-section">
+    <div class="rlm-calc__form-grid">
+
+      <!-- Hijos -->
+      <div class="rlm-calc__field">
+        <label class="rlm-calc__label">¿Hay hijos involucrados?</label>
+        <div class="rlm-calc__toggle-group">
+          <button type="button" class="rlm-calc__toggle rlm-calc__toggle--active" data-field="children" data-value="no" onclick="rlmSetToggle(this)">Sin Hijos</button>
+          <button type="button" class="rlm-calc__toggle" data-field="children" data-value="yes" onclick="rlmSetToggle(this)">Con Hijos</button>
+        </div>
+      </div>
+
+      <!-- Complejidad -->
+      <div class="rlm-calc__field">
+        <label class="rlm-calc__label">Complejidad del caso</label>
+        <select class="rlm-calc__select" id="rlm-complexity">
+          <option value="simple">Simple — Pocos bienes compartidos</option>
+          <option value="moderate" selected>Moderado — Vivienda, ahorros, jubilación</option>
+          <option value="complex">Complejo — Múltiples propiedades, negocios</option>
+        </select>
+      </div>
+
+      <!-- Bienes -->
+      <div class="rlm-calc__field">
+        <label class="rlm-calc__label">Bienes matrimoniales combinados <span class="rlm-calc__label-hint">(aproximado)</span></label>
+        <select class="rlm-calc__select" id="rlm-assets">
+          <option value="low">Menos de $500,000</option>
+          <option value="mid" selected>$500,000 – $2,000,000</option>
+          <option value="high">$2,000,000 – $5,000,000</option>
+          <option value="vhigh">Más de $5,000,000</option>
+        </select>
+      </div>
+
+      <!-- Botón calcular -->
+      <div class="rlm-calc__field rlm-calc__field--full">
+        <button type="button" class="rlm-calc__btn" id="rlm-calc-btn" onclick="rlmCalculate()">Calcular Costos e Impacto Familiar</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="rlm-calc__progress" id="rlm-progress">
+    <div class="rlm-calc__progress-bar" id="rlm-progress-bar"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="rlm-calc__results" id="rlm-results">
+
+    <!-- Savings Banner -->
+    <div class="rlm-calc__savings">
+      <div class="rlm-calc__savings-label">Ahorro estimado con mediación</div>
+      <div class="rlm-calc__savings-amount" id="rlm-savings-amount">$0</div>
+      <div class="rlm-calc__savings-note" id="rlm-savings-note">Basado en your inputs</div>
+    </div>
+
+    <!-- Side by side -->
+    <div class="rlm-calc__comparison">
+
+      <!-- Litigation -->
+      <div class="rlm-calc__card rlm-calc__card--litigation">
+        <div class="rlm-calc__card-badge">Traditional Litigation</div>
+        <div class="rlm-calc__card-title">Dos Abogados + Tribunal</div>
+        <div class="rlm-calc__card-price" id="rlm-lit-total">$0</div>
+        <div class="rlm-calc__card-price-note">Total estimado (ambos cónyuges combinados)</div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Anticipos de abogados</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-lit-retainer">—</span>
+        </div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Honorarios por hora</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-lit-hourly">—</span>
+        </div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Costos judiciales</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-lit-court">—</span>
+        </div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Costos de peritos / varios</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-lit-expert">—</span>
+        </div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Tiempo típico</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-lit-timeline">—</span>
+        </div>
+      </div>
+
+      <!-- Mediation -->
+      <div class="rlm-calc__card rlm-calc__card--mediation">
+        <div class="rlm-calc__card-badge">Mediation with Carmen</div>
+        <div class="rlm-calc__card-title">Paquete de Precio Fijo</div>
+        <div class="rlm-calc__card-price" id="rlm-med-total">$0</div>
+        <div class="rlm-calc__card-price-note">Precio fijo — sin sorpresas</div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Sesiones de mediación</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-med-sessions">—</span>
+        </div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Resúmenes de sesión</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-med-summaries">—</span>
+        </div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Borrador de acuerdo de separación</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-med-agreement">—</span>
+        </div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Emails & calls</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-med-comms">—</span>
+        </div>
+        <div class="rlm-calc__card-detail">
+          <span class="rlm-calc__card-detail-label">Tiempo típico</span>
+          <span class="rlm-calc__card-detail-value" id="rlm-med-timeline">—</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Visual bar comparison -->
+    <div class="rlm-calc__breakdown">
+      <div class="rlm-calc__breakdown-title">Comparación de Costos</div>
+      <div class="rlm-calc__bar-row">
+        <div class="rlm-calc__bar-header">
+          <span class="rlm-calc__bar-label">Traditional Litigation</span>
+          <span class="rlm-calc__bar-value" id="rlm-bar-lit-val">$0</span>
+        </div>
+        <div class="rlm-calc__bar-track">
+          <div class="rlm-calc__bar-fill rlm-calc__bar-fill--litigation" id="rlm-bar-lit"></div>
+        </div>
+      </div>
+      <div class="rlm-calc__bar-row">
+        <div class="rlm-calc__bar-header">
+          <span class="rlm-calc__bar-label">Mediation with Carmen Rodriguez</span>
+          <span class="rlm-calc__bar-value" id="rlm-bar-med-val">$0</span>
+        </div>
+        <div class="rlm-calc__bar-track">
+          <div class="rlm-calc__bar-fill rlm-calc__bar-fill--mediation" id="rlm-bar-med"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's included -->
+    <div class="rlm-calc__includes">
+      <div class="rlm-calc__includes-title">Your mediation package includes</div>
+      <div class="rlm-calc__includes-grid" id="rlm-includes-list">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+
+    <!-- ═══ WELLBEING IMPACT SECTION ═══ -->
+    <div class="rlm-calc__wellbeing">
+
+      <div class="rlm-calc__wellbeing-header">
+        <div class="rlm-calc__wellbeing-badge">Research-Based Comparison</div>
+        <h3 class="rlm-calc__wellbeing-title">Más allá de las finanzas: bienestar familiar</h3>
+        <p class="rlm-calc__wellbeing-subtitle">El proceso que elijas no solo afecta tu billetera — moldea tu salud mental, la adaptación de tus hijos y la capacidad de tu familia de seguir adelante.</p>
+      </div>
+
+      <!-- Key stats -->
+      <div class="rlm-calc__stat-grid" id="rlm-stat-grid">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Risk comparison: Adults -->
+      <div class="rlm-calc__risk-card">
+        <div class="rlm-calc__risk-title">Impacto en adultos</div>
+        <div id="rlm-risk-adults">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+      <!-- Risk comparison: Hijos (if applicable) -->
+      <div class="rlm-calc__risk-card" id="rlm-risk-children-card" style="display:none;">
+        <div class="rlm-calc__risk-title">Impacto en los hijos</div>
+        <div id="rlm-risk-children">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+      <!-- Research note -->
+      <div class="rlm-calc__research-note" id="rlm-research-note">
+        <!-- Filled by JS -->
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="rlm-calc__cta-box">
+      <div class="rlm-calc__cta-title">Ready to explore mediation?</div>
+      <div class="rlm-calc__cta-text">Agenda una consulta gratuita with Carmen Rodriguez to discuss your situation — no obligation, no pressure.</div>
+      <a href="https://www.rodriguezlawandmediation.com/contact" class="rlm-calc__cta-link">Agenda una Consulta</a>
+      <div class="rlm-calc__cta-spanish">Mediación disponible en español</div>
+    </div>
+
+    <!-- Sources -->
+    <div class="rlm-calc__sources">
+      Estimaciones basadas en 2025–2026 datos del mercado de NYC e investigación revisada por pares. Ver metodología abajo para fuentes detalladas.
+    </div>
+
+  </div>
+
+  <!-- Methodology / Sources expandable section -->
+  <div class="rlm-calc__methodology">
+    <button type="button" class="rlm-calc__meth-toggle" aria-expanded="false" onclick="rlmToggleMeth(this)">
+      <span>Cómo calculamos estas estimaciones — Fuentes, Metodología e Investigación</span>
+      <svg class="rlm-calc__meth-toggle-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 8l5 5 5-5"/></svg>
+    </button>
+    <div class="rlm-calc__meth-body" id="rlm-meth-body">
+      <div class="rlm-calc__meth-content">
+
+        <!-- How the calculator works -->
+        <div class="rlm-calc__meth-section">
+          <h3 class="rlm-calc__meth-h3">How does this calculator work?</h3>
+          <p class="rlm-calc__meth-p">This calculator compares two paths to ending a marriage in New York — traditional litigation and mediation with Carmen Rodriguez — across two dimensions that most divorce resources treat separately: financial cost and family wellbeing.</p>
+          <p class="rlm-calc__meth-p">The financial estimates are generated from market data on NYC attorney rates, retainers, and court fees. The wellbeing comparison draws on peer-reviewed research — including the only long-term randomized controlled trial ever conducted on divorce mediation outcomes — to show how the process you choose affects anxiety, depression, co-parenting, and your children's adjustment. Both adapt based on three inputs you provide: si hay hijos involucrados, the complexity of your case, and your approximate combined marital assets.</p>
+        </div>
+
+        <!-- Litigation model -->
+        <div class="rlm-calc__meth-section">
+          <h3 class="rlm-calc__meth-h3">How are the litigation costs calculated?</h3>
+          <p class="rlm-calc__meth-p">La estimación de litigación combines four cost components typical in a New York City divorce proceeding:</p>
+
+          <h4 class="rlm-calc__meth-h4">Anticipos de abogados</h4>
+          <p class="rlm-calc__meth-p">In New York City, divorce attorney retainers generally start at $7,500 to $10,000 per person. For high-net-worth or complex cases, retainers can reach $15,000 to $25,000 per person. Because both spouses retain separate counsel, the calculator doubles this figure. This is consistent with data reported by the Southern District of New York Bar and industry surveys of Manhattan family law practitioners.</p>
+
+          <h4 class="rlm-calc__meth-h4">Hourly attorney fees</h4>
+          <p class="rlm-calc__meth-p">NYC family law attorneys typically charge between $350 and $600 per hour, with rates varying by experience and firm size. The calculator models the number of attorney hours based on your inputs:</p>
+          <table class="rlm-calc__meth-table">
+            <tr><th>Factor</th><th>How it affects estimated hours</th></tr>
+            <tr><td>Hijos involved</td><td>Adds custody, parenting plan, and child support negotiations — increases base hours from ~20 to ~30 per attorney</td></tr>
+            <tr><td>Complejidad del caso</td><td>Simple cases (few assets, short marriage) require fewer hours. Complejo cases (multiple properties, business interests) may double or triple attorney time</td></tr>
+            <tr><td>Asset level</td><td>Higher-value estates require more due diligence, valuation, and negotiation time</td></tr>
+          </table>
+
+          <h4 class="rlm-calc__meth-h4">Court and filing fees</h4>
+          <p class="rlm-calc__meth-p">New York State requires a $210 index number fee and a $125 Note of Issue fee to file for divorce, per the <a href="https://ww2.nycourts.gov/courts/nyc/civil/fees.shtml" target="_blank" rel="noopener">NY Unified Court System fee schedule</a>. Additional costs may include a $35 settlement agreement filing fee, $45 per motion, service of process fees, and a Request for Judicial Intervention (RJI) fee. Cases involving children typically incur higher total court costs due to additional filings and potential custody evaluations.</p>
+
+          <h4 class="rlm-calc__meth-h4">Expert and miscellaneous costs</h4>
+          <p class="rlm-calc__meth-p">Complejo or high-asset cases often require outside professionals: real estate appraisers, business valuators, forensic accountants, pension/QDRO specialists, or child custody evaluators. These costs are only added to the estimate when your inputs indicate a complex case or significant assets. They are not included in simple or moderate cases with assets under $500,000.</p>
+
+          <div class="rlm-calc__meth-note">
+            <strong>Important:</strong> Litigation costs are inherently unpredictable. The estimates shown represent a typical range, but actual costs can be significantly higher in highly contested cases. According to multiple industry sources, the average contested divorce in New York costs between $15,000 and $50,000 per couple, with complex cases exceeding $100,000.
+          </div>
+        </div>
+
+        <!-- Mediation model -->
+        <div class="rlm-calc__meth-section">
+          <h3 class="rlm-calc__meth-h3">How are the mediation costs calculated?</h3>
+          <p class="rlm-calc__meth-p">La estimación de mediación is based on the actual flat-fee packages offered by <a href="https://www.rodriguezlawandmediation.com/packages" target="_blank" rel="noopener">Rodriguez Law and Mediation</a>, with pricing determined by tres factores: si hay hijos involucrados, el nivel de bienes matrimoniales combinados, y la complejidad del caso. Cada nivel de complejidad agrega una sesión de mediación adicional de 90 minutos.</p>
+          <table class="rlm-calc__meth-table">
+            <tr><th>Hijos</th><th>Complejidad</th><th>Sesiones</th><th>Borrador</th><th>Rango de precios por bienes</th></tr>
+            <tr><td>No</td><td>Simple</td><td>5 × 90 min</td><td>6 hrs</td><td>$5,500 – $8,500</td></tr>
+            <tr><td>No</td><td>Moderado</td><td>6 × 90 min</td><td>6 hrs</td><td>$6,250 – $9,250</td></tr>
+            <tr><td>No</td><td>Complejo</td><td>7 × 90 min</td><td>6–8 hrs</td><td>$7,000 – $10,000</td></tr>
+            <tr><td>Sí</td><td>Simple</td><td>7 × 90 min</td><td>8 hrs</td><td>$7,500 – $10,500</td></tr>
+            <tr><td>Sí</td><td>Moderado</td><td>8 × 90 min</td><td>8 hrs</td><td>$8,250 – $11,250</td></tr>
+            <tr><td>Sí</td><td>Complejo</td><td>9 × 90 min</td><td>8–10 hrs</td><td>$9,000 – $12,000</td></tr>
+          </table>
+          <p class="rlm-calc__meth-p">Within each row, the exact price depends on el nivel de bienes matrimoniales combinados: under $500K (lowest), $500K–$2M, $2M–$5M, and over $5M (highest). Cada paquete incluye resúmenes escritos de cada sesión, la redacción de un acuerdo de separación, and apoyo por correo electrónico y llamadas telefónicas throughout the process. Para niveles de bienes más altos ($500K and above), packages include comunicaciones ampliadas y posibles consultas con profesionales financieros. Todas las reuniones se realizan por Zoom o teléfono.</p>
+          <p class="rlm-calc__meth-p">Para casos complejos con bienes de más de $5M, the package also includes 2 horas adicionales de redacción del acuerdo sin cargo adicional. Todos los precios son fijos sin sorpresas. Carmen confirmará tu paquete durante una consulta gratuita.</p>
+
+          <div class="rlm-calc__meth-note">
+            <strong>What's not included in either estimate:</strong> Neither the litigation nor mediation figures include the cost of independent review attorneys (recommended but optional in mediation), real estate transfer taxes, QDRO preparation fees for pension division, or post-divorce filing of the judgment. These costs apply regardless of which path you choose.
+          </div>
+        </div>
+
+        <!-- Why mediation costs less -->
+        <div class="rlm-calc__meth-section">
+          <h3 class="rlm-calc__meth-h3">Why is mediation significantly less expensive than litigation?</h3>
+          <p class="rlm-calc__meth-p">In litigation, each spouse pays their own attorney — meaning the couple is funding two legal teams working against each other, often on unpredictable hourly billing. Discovery, motions, depositions, and trial preparation all generate billable hours. In mediation, both spouses work with a single neutral mediator at a shared cost, and the process is structured to reach agreements efficiently rather than to prepare for adversarial proceedings.</p>
+          <p class="rlm-calc__meth-p">According to the <a href="https://ww2.nycourts.gov/ip/adr/divorcemediation.shtml" target="_blank" rel="noopener">New York State Unified Court System</a>, mediation is recognized as one of the most cost-effective and time-efficient paths to divorce resolution. The average cost of divorce mediation in New York ranges from $3,000 to $9,000 for the complete process, compared to $15,000 to $50,000 or more for litigated divorces.</p>
+        </div>
+
+        <!-- About Carmen -->
+        <div class="rlm-calc__meth-section">
+          <h3 class="rlm-calc__meth-h3">About the mediator</h3>
+          <p class="rlm-calc__meth-p">Carmen M. Rodriguez is a divorce and family mediator based on the Upper West Side of Manhattan with over 20 years of legal experience in New York. She holds degrees from Brown University and Columbia Law School and has mediated more than 500 cases. Carmen serves on multiple court-appointed mediator rosters, including the U.S. District Court for the Southern District of New York, the New York Supreme Court (Manhattan, Brooklyn, Queens, and Staten Island), and NYC Family Court. In November 2024, she received the <a href="https://www.rodriguezlawandmediation.com/awards-and-honors" target="_blank" rel="noopener">James Duane Award</a> from the Southern District of New York. She is President of the Family and Divorce Mediation Council of Greater New York. Mediation services are available in English and Spanish.</p>
+        </div>
+
+        <!-- Sources -->
+        <div class="rlm-calc__meth-section">
+          <h3 class="rlm-calc__meth-h3">How is the family wellbeing comparison calculated?</h3>
+          <p class="rlm-calc__meth-p">The family wellbeing section is not a clinical assessment. It is a visual comparison of relative risk levels based on published peer-reviewed research into how different divorce processes affect adult mental health and children's adjustment. The risk levels shown (Low, Moderado, High) are informed by the following evidence:</p>
+
+          <h4 class="rlm-calc__meth-h4">Emery's 12-Year Randomized Controlled Trial</h4>
+          <p class="rlm-calc__meth-p">Dr. Robert Emery at the University of Virginia conducted the only long-term randomized study comparing mediation to litigation. Families who filed for contested custody hearings were randomly assigned (by coin flip) to either mediation or adversarial court settlement, then tracked for 12 years. Key findings: only 20% of mediation families appeared before a judge (vs. 75% of litigation families); non-residential parents who mediated were 3× more probabilidad de ver a sus hijos semanalmente 12 años después (28% vs. 9%); and weekly phone contact was 52% in mediation vs. 14% in litigation. Critically, the decisions reached were the same — it was the <em>process</em>, not the outcomes, that drove the long-term differences.</p>
+
+          <h4 class="rlm-calc__meth-h4">Adult mental health impacts</h4>
+          <p class="rlm-calc__meth-p">A 2020 study published in Frontiers in Psychology (Hald et al.) found that recently divorced individuals experience 2–9× higher depression rates than the general population. According to the American Psychological Association, approximately 40% of divorced adults report clinical levels of anxiety in the year following divorce. Research by Sbarra et al. (2015) demonstrated that sleep problems persisting beyond 10 semanas after separation are associated with increases in resting blood pressure. Divorce ranks as the second most stressful life event on the Holmes-Rahe Stress Scale, behind only the death of a spouse.</p>
+
+          <h4 class="rlm-calc__meth-h4">Impacto en los hijos</h4>
+          <p class="rlm-calc__meth-p">A 2025 scoping review in the Journal of Divorce & Remarriage found that high-conflict parental divorce is associated with PTSD-like symptoms, behavioral problems, anxiety, and lower academic achievement in children. World Psychiatry (Emery, 2016) confirmed that mediation produced better outcomes across conflict levels, co-parenting cooperation, and sustained parent involvement over 12 years compared to litigation. Structured parenting support during mediation has been shown to reduce children's psychological problems (Wolchik et al., 2002, JAMA).</p>
+
+          <div class="rlm-calc__meth-note">
+            <strong>Important:</strong> The wellbeing comparison is educational, not diagnostic. Individual experiences vary widely. The risk levels shown reflect general research trends comparing adversarial vs. collaborative divorce processes, not predictions for any specific family. If you or a family member is experiencing a mental health crisis, please contact a qualified mental health professional.
+          </div>
+        </div>
+
+        <!-- Sources -->
+        <div class="rlm-calc__meth-section">
+          <h3 class="rlm-calc__meth-h3">Sources</h3>
+          <p class="rlm-calc__meth-p">Cost estimates in this calculator are derived from the following publicly available sources and industry data (2024–2026):</p>
+          <ul class="rlm-calc__meth-source-list">
+            <li><a href="https://ww2.nycourts.gov/ip/adr/divorcemediation.shtml" target="_blank" rel="noopener">New York State Unified Court System</a> — Family and Divorce Mediation program information and court fee schedules</li>
+            <li><a href="https://onlinedivorceny.com/the-average-cost-of-divorce-in-ny/" target="_blank" rel="noopener">Average Cost of Divorce in New York (2026)</a> — Tarifas por hora de abogados ($350–$600/hr NYC metro), filing fee breakdown, contested vs. uncontested cost ranges</li>
+            <li><a href="https://snapdivorce.com/how-much-does-divorce-mediation-cost-in-new-york/" target="_blank" rel="noopener">SnapDivorce — Divorce Mediation Cost in New York</a> — Average mediation cost ($5,000–$9,000), retainer benchmarks ($7,500–$10,000/person), average litigation cost ($50,000 per couple)</li>
+            <li><a href="https://www.divorcenet.com/resources/divorce-mediation-in-new-york.html" target="_blank" rel="noopener">DivorceNet — Guide to Divorce Mediation in New York</a> — Court-connected mediation pricing, private mediation hourly rates ($250–$500/hr NYC metro)</li>
+            <li><a href="https://www.equitablemediation.com/new-york/" target="_blank" rel="noopener">Equitable Mediation — New York Divorce Mediation</a> — Manhattan attorney retainer benchmarks ($10,000/person average in 2024)</li>
+            <li><a href="https://www.rodriguezlawandmediation.com/packages" target="_blank" rel="noopener">Rodriguez Law and Mediation — Packages</a> — Flat-fee mediation package pricing as of 2026</li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2964496/" target="_blank" rel="noopener">Emery et al. — 12-Year Follow-Up Study of Child Custody Mediation (PMC)</a> — Randomized controlled trial comparing mediation vs. litigation outcomes over 12 years</li>
+            <li><a href="https://emeryondivorce.com/divorce_mediation_study.php" target="_blank" rel="noopener">Emery on Divorce — Mediation Study Summary</a> — Summary of key findings: parental contact, co-parenting, court appearances</li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6313686/" target="_blank" rel="noopener">World Psychiatry — Parental Divorce and Hijos's Mental Health (2019)</a> — Mediation outcomes for children, co-parenting cooperation</li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7734469/" target="_blank" rel="noopener">Frontiers in Psychology — Mental and Physical Health Among Recently Divorced (Hald et al., 2020)</a> — Depression rates, anxiety, stress, and physical health outcomes</li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4397145/" target="_blank" rel="noopener">Sbarra — Divorce and Health: Current Trends (2015)</a> — Alteración del sueño, blood pressure, depression risk factors</li>
+            <li><a href="https://www.tandfonline.com/doi/full/10.1080/28375300.2025.2533679" target="_blank" rel="noopener">Journal of Divorce & Remarriage — Interventions in High-Conflict Divorces (2025)</a> — Hijos's exposure to high-conflict divorce: PTSD, behavioral issues, academic impact</li>
+            <li><a href="https://www.psychologytoday.com/us/blog/better-divorce/202208/the-real-long-term-physical-and-mental-health-effects-divorce" target="_blank" rel="noopener">Psychology Today — Long-Term Physical and Mental Health Effects of Divorce (2022)</a> — Holmes-Rahe Stress Scale ranking, chronic health outcomes</li>
+          </ul>
+        </div>
+
+        <!-- Last updated -->
+        <div class="rlm-calc__meth-section">
+          <h3 class="rlm-calc__meth-h3">When was this calculator last updated?</h3>
+          <p class="rlm-calc__meth-p">This calculator was built and verified in February 2026 using the most current publicly available cost data for New York City divorce proceedings. Attorney rates, court fees, and market conditions may change over time. If you'd like to confirm current pricing for mediation with Carmen Rodriguez, <a href="https://www.rodriguezlawandmediation.com/contact" target="_blank" rel="noopener">schedule a complimentary consultation</a>.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="rlm-calc__disclaimer">
+    Esta calculadora proporciona estimaciones con fines educativos únicamente y no constituye asesoramiento legal o médico. Los costos y resultados reales varían según las circunstancias individuales. El uso de esta herramienta no crea una relación abogado-cliente. La comparación de bienestar no es una evaluación clínica. <a href="javascript:void(0)" onclick="document.querySelector('.rlm-calc__meth-toggle').click(); document.querySelector('.rlm-calc__methodology').scrollIntoView({behavior:'smooth'})">Lee nuestra metodología completa, investigación y fuentes</a>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // State
+  var state = { children: 'no' };
+
+  // Methodology accordion
+  window.rlmToggleMeth = function(btn) {
+    var body = document.getElementById('rlm-meth-body');
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !isOpen);
+    if (!isOpen) {
+      body.classList.add('rlm-calc__meth-body--open');
+    } else {
+      body.classList.remove('rlm-calc__meth-body--open');
+    }
+  };
+
+  // Toggle handler
+  window.rlmSetToggle = function(btn) {
+    var field = btn.getAttribute('data-field');
+    var value = btn.getAttribute('data-value');
+    state[field] = value;
+    var siblings = btn.parentNode.querySelectorAll('.rlm-calc__toggle');
+    for (var i = 0; i < siblings.length; i++) {
+      siblings[i].classList.remove('rlm-calc__toggle--active');
+    }
+    btn.classList.add('rlm-calc__toggle--active');
+  };
+
+  // Format currency
+  function fmt(n) {
+    return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  }
+
+  function fmtRange(low, high) {
+    return fmt(low) + ' – ' + fmt(high);
+  }
+
+  // Calculate
+  window.rlmCalculate = function() {
+    var children = state.children === 'yes';
+    var complexity = document.getElementById('rlm-complexity').value;
+    var assets = document.getElementById('rlm-assets').value;
+
+    // ── Litigation estimates ──
+    // Agreement level fixed at "some disagreements" for all scenarios
+    var retainerPP = { simple: 7500, moderate: 10000, complex: 15000 }[complexity];
+    var assetRetainerMult = { low: 0.9, mid: 1.0, high: 1.25, vhigh: 1.5 }[assets];
+    retainerPP = Math.round(retainerPP * assetRetainerMult);
+    var retainerTotal = retainerPP * 2;
+
+    var hourlyRate = { simple: 375, moderate: 450, complex: 550 }[complexity];
+    var baseHours = children ? 30 : 20;
+    var complexityHoursMult = { simple: 0.7, moderate: 1.0, complex: 1.5 }[complexity];
+    var assetHoursMult = { low: 0.85, mid: 1.0, high: 1.2, vhigh: 1.4 }[assets];
+    var hoursPerAtty = Math.round(baseHours * complexityHoursMult * 1.0 * assetHoursMult);
+    var hourlyFees = hoursPerAtty * hourlyRate * 2;
+
+    var courtFees = children ? 850 : 550;
+
+    var expertCosts = 0;
+    if (complexity === 'complex' || assets === 'high' || assets === 'vhigh') {
+      expertCosts = { low: 1500, mid: 3000, high: 5000, vhigh: 8000 }[assets];
+    }
+
+    var litTotal = retainerTotal + hourlyFees + courtFees + expertCosts;
+    var litLow = Math.round(litTotal * 0.8);
+    var litHigh = Math.round(litTotal * 1.2);
+
+    var litMonths = { simple: '6–10', moderate: '8–14', complex: '12–24' }[complexity];
+
+    // ── Mediation estimates (fixed pricing by asset tier + complexity) ──
+    var medTotal, sessions, draftHours, commsText, medTimeline;
+
+    // Base prices by asset tier (Simple complexity)
+    if (children) {
+      medTotal = { low: 7500, mid: 8500, high: 9500, vhigh: 10500 }[assets];
+      sessions = 7;
+      draftHours = 8;
+      medTimeline = '2–4 meses';
+    } else {
+      medTotal = { low: 5500, mid: 6500, high: 7500, vhigh: 8500 }[assets];
+      sessions = 5;
+      draftHours = 6;
+      medTimeline = '6–12 semanas';
+    }
+
+    // Complejidad adds sessions: Moderado +1, Complejo +2 (at $750/session)
+    var extraSesiones = { simple: 0, moderate: 1, complex: 2 }[complexity];
+    sessions += extraSesiones;
+    medTotal += extraSesiones * 750;
+
+    // Complejo + Más de $5M: also adds +2 draft hours (no extra charge)
+    if (complexity === 'complex' && assets === 'vhigh') {
+      draftHours += 2;
+    }
+
+    // Communications text scales with asset level
+    if (assets === 'low') {
+      commsText = 'Correos electrónicos y llamadas telefónicas razonables';
+    } else {
+      commsText = 'Comunicaciones ampliadas, posibles consultas con profesionales financieros';
+    }
+
+    // Savings
+    var savingsLow = litLow - medTotal;
+    var savingsHigh = litHigh - medTotal;
+    var savingsMid = Math.round((savingsLow + savingsHigh) / 2);
+
+    // ── Populate DOM ──
+    document.getElementById('rlm-savings-amount').textContent = fmtRange(Math.max(0, savingsLow), Math.max(0, savingsHigh));
+    document.getElementById('rlm-savings-note').textContent = 'Ahorro estimado basado en tus datos';
+
+    // Litigation card
+    document.getElementById('rlm-lit-total').textContent = fmtRange(litLow, litHigh);
+    document.getElementById('rlm-lit-retainer').textContent = fmtRange(Math.round(retainerTotal * 0.85), retainerTotal);
+    document.getElementById('rlm-lit-hourly').textContent = fmtRange(Math.round(hourlyFees * 0.8), Math.round(hourlyFees * 1.2));
+    document.getElementById('rlm-lit-court').textContent = fmt(courtFees);
+    document.getElementById('rlm-lit-expert').textContent = expertCosts > 0 ? fmt(expertCosts) : 'Puede no aplicar';
+    document.getElementById('rlm-lit-timeline').textContent = litMonths + ' meses';
+
+    // Mediation card (fixed price, no range)
+    document.getElementById('rlm-med-total').textContent = fmt(medTotal);
+    document.getElementById('rlm-med-sessions').textContent = sessions + ' × 90-minute sessions';
+    document.getElementById('rlm-med-summaries').textContent = 'Incluido';
+    document.getElementById('rlm-med-agreement').textContent = 'Incluido (' + draftHours + ' hrs)';
+    document.getElementById('rlm-med-comms').textContent = commsText;
+    document.getElementById('rlm-med-timeline').textContent = medTimeline;
+
+    // Bars
+    document.getElementById('rlm-bar-lit-val').textContent = fmtRange(litLow, litHigh);
+    document.getElementById('rlm-bar-med-val').textContent = fmt(medTotal);
+
+    setTimeout(function() {
+      document.getElementById('rlm-bar-lit').style.width = '100%';
+      document.getElementById('rlm-bar-med').style.width = Math.round((medTotal / litHigh) * 100) + '%';
+    }, 100);
+
+    // Includes
+    var includes = [
+      sessions + ' sesiones de mediación (90 min cada una)',
+      'Resumen escrito después de cada sesión',
+      'Borrador de acuerdo de separación (' + draftHours + ' hours)',
+      commsText,
+      'Todas las reuniones por Zoom o teléfono',
+      'Servicio bilingüe (inglés y español)'
+    ];
+    if (children) {
+      includes.push('Plan de crianza y acuerdos de custodia');
+      includes.push('Cálculos de manutención infantil');
+    }
+    var includesHTML = '';
+    for (var i = 0; i < includes.length; i++) {
+      includesHTML += '<div class="rlm-calc__includes-item">' +
+        '<div class="rlm-calc__check"><svg viewBox="0 0 12 12"><path d="M2.5 6L5 8.5L9.5 3.5"/></svg></div>' +
+        '<span>' + includes[i] + '</span></div>';
+    }
+    document.getElementById('rlm-includes-list').innerHTML = includesHTML;
+
+    // ── Wellbeing impact section ──
+    // Wellbeing contentiousness driven by case complexity
+    var contentious = { simple: 'low', moderate: 'moderate', complex: 'high' }[complexity];
+
+    // Risk data: [label, litigationLevel, litigationWidth, mediationLevel, mediationWidth]
+    // Levels: vlow, low, med, high
+    var adultRisks;
+    if (contentious === 'high') {
+      adultRisks = [
+        ['Ansiedad y estrés', 'high', 90, 'High', 'med', 45, 'Moderado'],
+        ['Riesgo de depresión', 'high', 85, 'High', 'low', 35, 'Lower'],
+        ['Alteración del sueño', 'high', 80, 'High', 'med', 40, 'Moderado'],
+        ['Duración del conflicto', 'high', 95, 'High', 'med', 50, 'Moderado'],
+        ['Sensación de control', 'high', 85, 'Very low', 'low', 30, 'Higher'],
+        ['Tensión en la co-paternidad', 'high', 90, 'High', 'med', 45, 'Moderado']
+      ];
+    } else if (contentious === 'moderate') {
+      adultRisks = [
+        ['Ansiedad y estrés', 'high', 75, 'Elevated', 'low', 30, 'Lower'],
+        ['Riesgo de depresión', 'med', 60, 'Moderado', 'vlow', 20, 'Lower'],
+        ['Alteración del sueño', 'med', 65, 'Moderado', 'low', 25, 'Lower'],
+        ['Duración del conflicto', 'high', 80, 'Extended', 'low', 30, 'Shorter'],
+        ['Sensación de control', 'med', 70, 'Limited', 'vlow', 20, 'Higher'],
+        ['Tensión en la co-paternidad', 'med', 65, 'Moderado', 'vlow', 25, 'Lower']
+      ];
+    } else {
+      adultRisks = [
+        ['Ansiedad y estrés', 'med', 55, 'Moderado', 'vlow', 18, 'Low'],
+        ['Riesgo de depresión', 'med', 45, 'Some risk', 'vlow', 15, 'Lower'],
+        ['Alteración del sueño', 'low', 40, 'Some risk', 'vlow', 15, 'Lower'],
+        ['Duración del conflicto', 'med', 60, 'Moderado', 'vlow', 15, 'Short'],
+        ['Sensación de control', 'med', 55, 'Limited', 'vlow', 12, 'High'],
+        ['Tensión en la co-paternidad', 'low', 40, 'Some risk', 'vlow', 15, 'Low']
+      ];
+    }
+
+    function buildRiskRows(risks) {
+      var html = '';
+      for (var r = 0; r < risks.length; r++) {
+        var d = risks[r];
+        html += '<div class="rlm-calc__risk-row">' +
+          '<div class="rlm-calc__risk-label">' + d[0] + '</div>' +
+          '<div class="rlm-calc__risk-bar-container">' +
+            '<div class="rlm-calc__risk-bar-bg"><div class="rlm-calc__risk-bar-inner rlm-calc__risk-bar-inner--' + d[1] + '" style="width:' + d[2] + '%"></div></div>' +
+            '<span class="rlm-calc__risk-level rlm-calc__risk-level--' + d[1] + '">' + d[3] + '</span>' +
+          '</div>' +
+          '<div class="rlm-calc__risk-bar-container">' +
+            '<div class="rlm-calc__risk-bar-bg"><div class="rlm-calc__risk-bar-inner rlm-calc__risk-bar-inner--' + d[4] + '" style="width:' + d[5] + '%"></div></div>' +
+            '<span class="rlm-calc__risk-level rlm-calc__risk-level--' + d[4] + '">' + d[6] + '</span>' +
+          '</div>' +
+        '</div>';
+      }
+      // Add header row
+      var header = '<div class="rlm-calc__risk-row" style="border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:4px;">' +
+        '<div class="rlm-calc__risk-label" style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-light);font-weight:600;"></div>' +
+        '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--coral);font-weight:600;text-align:center;">Litigation</div>' +
+        '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:#5A835E;font-weight:600;text-align:center;">Mediation</div>' +
+      '</div>';
+      return header + html;
+    }
+
+    document.getElementById('rlm-risk-adults').innerHTML = buildRiskRows(adultRisks);
+
+    // Hijos section
+    if (children) {
+      document.getElementById('rlm-risk-children-card').style.display = 'block';
+      var childRisks;
+      if (contentious === 'high') {
+        childRisks = [
+          ['Problemas de conducta', 'high', 85, 'High', 'low', 30, 'Lower'],
+          ['Síntomas de ansiedad', 'high', 80, 'High', 'low', 30, 'Lower'],
+          ['Impacto académico', 'high', 75, 'High', 'vlow', 25, 'Lower'],
+          ['Conflictos de lealtad', 'high', 90, 'High', 'low', 30, 'Lower'],
+          ['Relación con los padres', 'high', 85, 'Strained', 'low', 25, 'Stronger']
+        ];
+      } else if (contentious === 'moderate') {
+        childRisks = [
+          ['Problemas de conducta', 'med', 55, 'Moderado', 'vlow', 18, 'Lower'],
+          ['Síntomas de ansiedad', 'med', 55, 'Moderado', 'vlow', 18, 'Lower'],
+          ['Impacto académico', 'low', 40, 'Some risk', 'vlow', 12, 'Lower'],
+          ['Conflictos de lealtad', 'med', 60, 'Moderado', 'vlow', 15, 'Lower'],
+          ['Relación con los padres', 'med', 55, 'Variable', 'vlow', 18, 'Stronger']
+        ];
+      } else {
+        childRisks = [
+          ['Problemas de conducta', 'low', 35, 'Some risk', 'vlow', 12, 'Low'],
+          ['Síntomas de ansiedad', 'low', 35, 'Some risk', 'vlow', 12, 'Low'],
+          ['Impacto académico', 'vlow', 20, 'Low', 'vlow', 10, 'Low'],
+          ['Conflictos de lealtad', 'low', 30, 'Some risk', 'vlow', 10, 'Low'],
+          ['Relación con los padres', 'low', 30, 'Good', 'vlow', 10, 'Strong']
+        ];
+      }
+      document.getElementById('rlm-risk-children').innerHTML = buildRiskRows(childRisks);
+    } else {
+      document.getElementById('rlm-risk-children-card').style.display = 'none';
+    }
+
+    // Stat cards
+    var statHTML = '';
+    if (children) {
+      statHTML += '<div class="rlm-calc__stat-card rlm-calc__stat-card--lit">' +
+        '<div class="rlm-calc__stat-number">9%</div>' +
+        '<div class="rlm-calc__stat-desc">de padres no custodios en litigación<br>ven a sus hijos semanalmente después de 12 años</div></div>';
+      statHTML += '<div class="rlm-calc__stat-card rlm-calc__stat-card--med">' +
+        '<div class="rlm-calc__stat-number">28%</div>' +
+        '<div class="rlm-calc__stat-desc">de padres no custodios en mediación<br>ven a sus hijos semanalmente después de 12 años</div></div>';
+    } else {
+      statHTML += '<div class="rlm-calc__stat-card rlm-calc__stat-card--lit">' +
+        '<div class="rlm-calc__stat-number">' + litMonths + ' mo</div>' +
+        '<div class="rlm-calc__stat-desc">Tiempo típico de litigación<br>incertidumbre y estrés prolongado</div></div>';
+      statHTML += '<div class="rlm-calc__stat-card rlm-calc__stat-card--med">' +
+        '<div class="rlm-calc__stat-number">' + medTimeline.replace(' meses','mo').replace(' semanas','wk') + '</div>' +
+        '<div class="rlm-calc__stat-desc">Tiempo típico de mediación<br>resolución más rápida, menos estrés</div></div>';
+    }
+    document.getElementById('rlm-stat-grid').innerHTML = statHTML;
+
+    // Research note
+    var noteHTML = '<strong>Basado en published research:</strong> ';
+    if (children) {
+      noteHTML += 'Dr. Robert Emery\'s <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2964496/" target="_blank" rel="noopener">12-year randomized controlled study</a> (University of Virginia) found that just 5 hours of mediation caused non-residential parents to maintain dramatically more contact with their children over a decade later — 28% weekly visits vs. 9% in litigation. A study in <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6313686/" target="_blank" rel="noopener">World Psychiatry</a> confirmed that mediation reduced conflict, improved co-parenting, and resulted in better outcomes for children compared to litigation. ';
+      noteHTML += 'High-conflict divorce is associated with PTSD-like symptoms, behavioral issues, and lower academic achievement in children (<a href="https://www.tandfonline.com/doi/full/10.1080/28375300.2025.2533679" target="_blank" rel="noopener">Journal of Divorce & Remarriage, 2025</a>). ';
+    } else {
+      noteHTML += 'Divorce ranks as the <a href="https://www.psychologytoday.com/us/blog/better-divorce/202208/the-real-long-term-physical-and-mental-health-effects-divorce" target="_blank" rel="noopener">second most stressful life event</a> on the Holmes-Rahe Stress Scale. ';
+    }
+    noteHTML += 'Research shows divorced individuals experience 2–9× higher depression rates (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7734469/" target="_blank" rel="noopener">Hald et al., 2020</a>), and approximately 40% of recently divorced adults report clinical anxiety levels. ';
+    noteHTML += 'Alteración del sueño beyond 10 semanas post-separation is linked to elevated blood pressure (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4397145/" target="_blank" rel="noopener">Sbarra, 2015</a>). The adversarial litigation process extends conflict exposure and amplifies these risks. Mediation compresses the timeline and replaces opposition with collaboration.';
+    document.getElementById('rlm-research-note').innerHTML = noteHTML;
+
+    // Show results
+    var resultsEl = document.getElementById('rlm-results');
+    var isFirstCalc = !resultsEl.classList.contains('rlm-calc__results--visible');
+
+    if (isFirstCalc) {
+      resultsEl.classList.add('rlm-calc__results--visible');
+      calculatedOnce = true;
+      var resultsOffset = document.getElementById('rlm-section-costs').offsetTop - 20;
+      window.parent.postMessage({ type: 'rlm-calc-scroll', offset: resultsOffset }, '*');
+      rlmEnableAutoRecalc();
+    } else {
+      rlmFlashProgress();
+      rlmFlashUpdated();
+    }
+    setTimeout(rlmPostHeight, 300);
+  };
+
+  var calculatedOnce = false;
+
+  // ── Parent scroll listener ──
+  var parentScrollOffset = 0;
+  var parentViewportHeight = 800;
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'rlm-parent-scroll') {
+      parentScrollOffset = e.data.iframeTopOffset;
+      if (e.data.viewportHeight) parentViewportHeight = e.data.viewportHeight;
+      updateFloatPanel();
+    }
+  });
+
+  function updateFloatPanel() {
+    if (!calculatedOnce) return;
+    var panel = document.getElementById('rlm-float-panel');
+    var formEl = document.getElementById('rlm-form-section');
+    if (!formEl || !panel) return;
+
+    var formBottom = formEl.offsetTop + formEl.offsetHeight;
+    var formVisibleBottom = formBottom + parentScrollOffset;
+
+    if (formVisibleBottom < 100) {
+      panel.classList.add('rlm-calc__float-panel--visible');
+      var isMobile = window.innerWidth <= 960;
+      var panelHeight = panel.offsetHeight || 400;
+
+      if (isMobile) {
+        var bottomPos = -parentScrollOffset + parentViewportHeight - panelHeight;
+        panel.style.top = bottomPos + 'px';
+      } else {
+        var viewportCenter = -parentScrollOffset + (parentViewportHeight / 2);
+        var panelTop = viewportCenter - (panelHeight / 2);
+        var contentHeight = document.getElementById('rlm-cost-calculator').scrollHeight;
+        panelTop = Math.max(200, Math.min(contentHeight - panelHeight - 40, panelTop));
+        panel.style.top = panelTop + 'px';
+      }
+    } else {
+      panel.classList.remove('rlm-calc__float-panel--visible');
+    }
+
+    var navBtn = document.getElementById('rlm-fp-nav');
+    if (!navBtn) return;
+    var wellbeingEl = document.getElementById('rlm-section-wellbeing');
+    if (wellbeingEl) {
+      var wellbeingTop = wellbeingEl.offsetTop + parentScrollOffset;
+      if (wellbeingTop > 200) {
+        navBtn.textContent = 'Ver impacto familiar \u2193';
+        navBtn.setAttribute('data-target', 'rlm-section-wellbeing');
+      } else {
+        navBtn.textContent = 'Ver comparación de costos \u2191';
+        navBtn.setAttribute('data-target', 'rlm-section-costs');
+      }
+    }
+  }
+
+  window.rlmFloatNav = function() {
+    var target = document.getElementById('rlm-fp-nav').getAttribute('data-target') || 'rlm-section-costs';
+    var el = document.getElementById(target);
+    if (el) window.parent.postMessage({ type: 'rlm-calc-scroll', offset: el.offsetTop - 20 }, '*');
+  };
+
+  window.rlmFloatToggle = function(val) {
+    state.children = val;
+    document.getElementById('rlm-fp-no-kids').classList.toggle('rlm-calc__float-tog--active', val === 'no');
+    document.getElementById('rlm-fp-yes-kids').classList.toggle('rlm-calc__float-tog--active', val === 'yes');
+    document.querySelectorAll('.rlm-calc__toggle[data-field="children"]').forEach(function(btn) {
+      btn.classList.toggle('rlm-calc__toggle--active', btn.getAttribute('data-value') === val);
+    });
+    window.rlmCalculate();
+  };
+
+  window.rlmFloatSync = function() {
+    document.getElementById('rlm-complexity').value = document.getElementById('rlm-fp-complexity').value;
+    document.getElementById('rlm-assets').value = document.getElementById('rlm-fp-assets').value;
+    window.rlmCalculate();
+  };
+
+  function rlmSyncToFloat() {
+    var fp = document.getElementById('rlm-fp-complexity');
+    if (fp) fp.value = document.getElementById('rlm-complexity').value;
+    fp = document.getElementById('rlm-fp-assets');
+    if (fp) fp.value = document.getElementById('rlm-assets').value;
+    document.getElementById('rlm-fp-no-kids').classList.toggle('rlm-calc__float-tog--active', state.children === 'no');
+    document.getElementById('rlm-fp-yes-kids').classList.toggle('rlm-calc__float-tog--active', state.children === 'yes');
+  }
+
+  function rlmFlashUpdated() {
+    var el = document.getElementById('rlm-fp-updated');
+    if (!el) return;
+    el.classList.add('rlm-calc__float-updated--show');
+    setTimeout(function() { el.classList.remove('rlm-calc__float-updated--show'); }, 1500);
+  }
+
+  function rlmFlashProgress() {
+    var prog = document.getElementById('rlm-progress');
+    var bar = document.getElementById('rlm-progress-bar');
+    bar.style.transition = 'none'; bar.style.width = '0%';
+    prog.classList.add('rlm-calc__progress--active');
+    requestAnimationFrame(function() { requestAnimationFrame(function() {
+      bar.style.transition = 'width 0.45s ease-out'; bar.style.width = '100%';
+      setTimeout(function() { prog.classList.remove('rlm-calc__progress--active'); bar.style.width = '0%'; }, 600);
+    }); });
+  }
+
+  var autoRecalcEnabled = false;
+  function rlmEnableAutoRecalc() {
+    if (autoRecalcEnabled) return;
+    autoRecalcEnabled = true;
+    ['rlm-complexity','rlm-assets'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('change', function() { rlmSyncToFloat(); window.rlmCalculate(); });
+    });
+    document.querySelectorAll('.rlm-calc__toggle[data-field="children"]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setTimeout(function() { rlmSyncToFloat(); window.rlmCalculate(); }, 50);
+      });
+    });
+  }
+
+  function rlmPostHeight() {
+    var h = document.getElementById('rlm-cost-calculator').scrollHeight + 200;
+    window.parent.postMessage({ type: 'rlm-calc-resize', height: h }, '*');
+  }
+  window.addEventListener('load', function() { setTimeout(rlmPostHeight, 500); setTimeout(rlmPostHeight, 1500); });
+  window.addEventListener('resize', rlmPostHeight);
+
+  var _origCalc = window.rlmCalculate;
+  window.rlmCalculate = function() { _origCalc(); setTimeout(rlmPostHeight, 300); setTimeout(rlmPostHeight, 1000); };
+
+  var _origMeth = window.rlmToggleMeth;
+  window.rlmToggleMeth = function(btn) { _origMeth(btn); setTimeout(rlmPostHeight, 500); };
+
+})();
+</script>
+
+</body>
+</html>
